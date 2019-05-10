@@ -8,7 +8,7 @@
 #include <allegro5\allegro_primitives.h>
 
 #include "Images.h"
-#include "Button.h"
+#include "Board.h"
 
 #define UNIT 1
 

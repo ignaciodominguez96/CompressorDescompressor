@@ -1,4 +1,9 @@
 #pragma once
+
+#ifndef SEARCH_FILE_H
+#define	SEARCH_FILE_H
+
+
 #include <vector>
 #include<iostream>
 #include <fstream>
@@ -10,7 +15,13 @@ using namespace std;
 using namespace boost::filesystem;
 
 
-bool SearchFile(vector<string>& paths_vector, const char* path, const char* extension);
-//Funcion que busca en un directorio todos los archivos que terminan con una extension dada.
-//La extension debe tener el . que la precede. Por ejemplo, como tercer parametro ".txt"
+bool search_files_with_extension(vector<string>& paths_vector, const char* directory_wanted, const char* extension_wanted);
+
+
+
+#endif // !SEARCH_FILE_H
+
+
+
+
 

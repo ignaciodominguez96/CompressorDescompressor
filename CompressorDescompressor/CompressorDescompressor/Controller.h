@@ -4,7 +4,7 @@
 //A las funcione necesarias.
 #include<allegro5\allegro.h>
 #include"Output.h"
-#include"button.h"
+#include"board.h"
 
 
 class controller {
