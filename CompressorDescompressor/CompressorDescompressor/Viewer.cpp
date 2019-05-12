@@ -106,7 +106,13 @@ ALLEGRO_DISPLAY* viewer::get_display(void)
 }
 
 //listo
-void viewer::print_message(char * mesagge)
+unsigned int viewer::get_mode(void)
+{
+	return (this->mode);
+}
+
+//listo
+void viewer::print_message(const char * mesagge)
 {
 	al_draw_text(this->font, al_color_name(FONT_COLOR), this->width / 2.0, this->height - (IMAGE_SIZE_Y / 4.0), ALLEGRO_ALIGN_CENTER, mesagge);
 }

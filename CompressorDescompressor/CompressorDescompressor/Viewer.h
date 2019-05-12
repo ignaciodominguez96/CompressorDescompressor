@@ -31,7 +31,9 @@ public:
 	bool is_init(void);					 //listo
 	void update_display(board & board); //listo
 	ALLEGRO_DISPLAY* get_display(void);
-	void print_message(char * mesagge);
+	unsigned int get_mode(void);
+
+	void print_message(const char * mesagge);
 
 private:
 
