@@ -130,6 +130,7 @@
   <ItemGroup>
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="ImageDescriptor.cpp" />
+    <ClCompile Include="ImagesManager.cpp" />
     <ClCompile Include="Viewer.cpp" />
     <ClCompile Include="SearchFile.cpp" />
   </ItemGroup>

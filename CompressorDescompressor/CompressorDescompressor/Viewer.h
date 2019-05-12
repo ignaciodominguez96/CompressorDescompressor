@@ -8,7 +8,7 @@
 #include <allegro5\allegro_color.h>
 #include <allegro5\allegro_primitives.h>
 
-#include "Images.h"
+#include "ImagesManager.h"
 #include "Board.h"
 
 

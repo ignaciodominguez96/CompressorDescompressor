@@ -18,7 +18,7 @@ ImageDescriptor::ImageDescriptor(const char * path_image)
 {
 	this->file_name = extract_name_file(path_image);
 	this->error = false;
-	this->bitmap = load_image_at_size(path_image, IMAGE_SIZE_X, IMAGE_SIZE_Y);
+	this->bitmap = resize_image(path_image, IMAGE_SIZE_X, IMAGE_SIZE_Y);
 
 	if (bitmap == nullptr)
 	{

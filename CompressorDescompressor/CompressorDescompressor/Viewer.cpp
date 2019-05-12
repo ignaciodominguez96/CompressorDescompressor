@@ -45,7 +45,7 @@ viewer::viewer(unsigned int width, unsigned int height, double font_size, unsign
 	if (mode == MODE_DESCOMPRESSOR)
 	{
 		this->error_descompressor_image = false;
-		this->image_descompressor = load_image_at_size(IMAGE_DESCOMPRESSOR_PATH, IMAGE_SIZE_X, IMAGE_SIZE_Y);
+		this->image_descompressor = resize_image(IMAGE_DESCOMPRESSOR_PATH, IMAGE_SIZE_X, IMAGE_SIZE_Y);
 
 
 		if (this->image_descompressor == nullptr)
@@ -128,7 +128,7 @@ bool viewer::init_allegro_elements(const char* path_background, const char* font
 
 	if (init_allegro_el)
 	{
-		this->background = load_image_at_size(path_background, (this->width)*(UNIT), (this->height)*(UNIT));
+		this->background = resize_image(path_background, (this->width)*(UNIT), (this->height)*(UNIT));
 
 		if (background == nullptr)
 		{
