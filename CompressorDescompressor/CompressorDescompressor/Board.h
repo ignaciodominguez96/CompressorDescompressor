@@ -2,11 +2,11 @@
 #include <vector>
 #include "ImageDescriptor.h"
 
-#define IMAGES_PER_DAMERO 9
+#define IMAGES_PER_BOARD 9
 #define BOTON_LEFT 0  //indices correspondientes al vector de botones.
 #define BOTON_RIGHT 1
-#define FIRST_IMG_OF_THIS_DAMERO(dameroActual) (IMAGES_PER_DAMERO * dameroActual)
-#define LAST_IMG_OF_THIS_DAMERO(dameroActual) (IMAGES_PER_DAMERO * (dameroActual + 1))
+#define FIRST_IMG_OF_THIS_BOARD(boardActual) (IMAGES_PER_BOARD * boardActual)
+#define LAST_IMG_OF_THIS_BOARD(boardActual) (IMAGES_PER_BOARD * (boardActual + 1))
 
 class board
 {
@@ -33,17 +33,17 @@ public:
 private:
 
 	vector<ImageDescriptor> & images;
-	vector<ImageDescriptor> & botons;
+	vector<ImageDescriptor> & buttons;
 	int image_sizeX; //tamaño de cada image
 	int image_sizeY;
 	int button_sizeX; //tamaño de los botones
 	int button_sizeY;
 	int marginX; //margenes
 	int marginY;
-	int width; //dimensiones del damero
+	int width; //dimensiones del Board
 	int height;
-	int button_actual; // de cero a la cantidad de dameros -1
-	int button_cant; // cantidad de dameros
+	int button_actual; // de cero a la cantidad de Boards -1
+	int button_cant; // cantidad de Boards
 
 	void change_board(int botonPressed_);
 };
