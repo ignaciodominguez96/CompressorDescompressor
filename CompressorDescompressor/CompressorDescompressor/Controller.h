@@ -11,7 +11,7 @@ class controller {
 public:
 	controller(viewer&, unsigned int threshold_);
 	~controller();
-	void dispatch(viewer& v, damero& d);
+	void dispatch(viewer& v, board& d);
 	bool IsInitOK()const;
 	bool GetExit()const;
 
