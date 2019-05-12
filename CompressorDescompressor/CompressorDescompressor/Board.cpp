@@ -1,210 +1,254 @@
-
 #include "Board.h"
+
 #define MARGEN_RATE 0.1
 
-board::board(int width_, int height_, vector<ImageDescriptor> & images_, vector<ImageDescriptor> & botons_) : images(images_), buttons(botons_)
+
+//listo
+board::board(int width, int height, vector<image>& images, vector<button> & buttons)
 {
-	width = width_;
-	height = height_;
-	marginX = width * MARGEN_RATE;
-	marginY = height * MARGEN_RATE;
-	buttons[BOTON_LEFT].setPos(BOTON_SIZE_X * MARGEN_RATE, height - BOTON_SIZE_Y);
-	buttons[BOTON_RIGHT].setPos(width - (BOTON_SIZE_X * 2) - ((BOTON_SIZE_X * MARGEN_RATE) * 3), height - BOTON_SIZE_Y - (BOTON_SIZE_Y * MARGEN_RATE));
+	this->width = width;
+	this->height = height;
 
-	button_cant = (int)(images.size() / IMAGES_PER_BOARD);
-	if (!(images.size() % IMAGES_PER_BOARD)) //si la division es exacta
+	this->margin_x = width * MARGEN_RATE;
+	this->margin_y = height * MARGEN_RATE;
+
+	this->images = images;
+
+	buttons[BUTTON_LEFT].set_pos(BUTTON_SIZE_X * MARGEN_RATE, this->height - BUTTON_SIZE_Y);
+	buttons[BUTTON_RIGHT].set_pos(this->height - (BUTTON_SIZE_X * 2) - ((BUTTON_SIZE_X * MARGEN_RATE) * 3), this->height - BUTTON_SIZE_Y - (BUTTON_SIZE_Y * MARGEN_RATE));
+
+	this->board_cant = (int)( (this->images).size() / MAX_IMAGES_IN_THE_BOARD);
+
+	if (!((this->images).size() % MAX_IMAGES_IN_THE_BOARD)) //si la division es exacta
 	{
-		button_cant--; //resto, porque los dameros arrancan desde 0.
-	}					//ejemplo: si tengo 9 imagenes y mi damero acepta 9 imagenes como maximo, quiero que mi dameroMaximo sea '0' en lugar de '1'
+		(this->board_cant)--;
+	}							
 
-	button_actual = 0;
+	
+
+
+	this->button_actual = 0;
 }
+
+//listo
 board::~board()
 {
-
 }
-void 
-board::refresh(void)
-{
-	int pos_X = marginX; //posicion de la imagen inicial
-	int pos_Y = marginY;
-	for (int i = FIRST_IMG_OF_THIS_BOARD(button_actual); (i < LAST_IMG_OF_THIS_BOARD(button_actual)) && (i < images.size()); i++)
-	{
-		images[i].setPos(pos_X, pos_Y); //seteo posicion
-		pos_X += (image_sizeX + marginX);  //calculo posición de la proxima imagen
-		if (pos_X > (width - marginX - image_sizeX)) //reseteo posX cuando llega al tope de anchura del board. tope de anchura: (width - marginX - image_sizeX)
-		{
-			pos_X = marginX;
-			pos_Y += (image_sizeY + marginY); //avanzo en 'y'
-		}
 
+//listo
+void board::refresh(void)
+{
+	int aux_pos_x = this->margin_x; 
+	int aux_pos_y = this->margin_y;
+
+	for (int i = FIRST_IMAGE_BOARD(this->board_actual); (i < LAST_IMAGE_BOARD(this->board_actual)) && (i < (this->images).size()); i++)
+	{
+
+		int image_size = this->image_size_x;
+		int margin = this->margin_x;
+
+		((this->images)[i]).set_pos(aux_pos_x, aux_pos_y);
+
+		aux_pos_x += image_size + margin;
+		
+		if (aux_pos_x > (this->width - margin - image_size)) //reseteo pos_x cuando llega al tope de ancho del board
+		{
+			aux_pos_x = margin;
+			aux_pos_y += this->image_size_y + this->margin_y; //avanzo en 'y'
+		}
 	}
 }
 
-
-void 
-board::touch(int x, int y)
+//listo
+void board::touch(int cordx_touch, int cordy_touch)
 {
-	bool imageTouched = false;
-	int pos_X = 0;
-	int pos_Y = 0;
+	bool image_touched = false;
+	
+	
+	int aux_pos_x = 0;
+	int aux_pos_y = 0;
 
-	for (int i = FIRST_IMG_OF_THIS_BOARD(button_actual); (i < LAST_IMG_OF_THIS_BOARD(button_actual)) && (!imageTouched) && (i < images.size()); i++)
+	for (int i = FIRST_IMAGE_BOARD(this->board_actual); (i < LAST_IMAGE_BOARD(this->board_actual)) && (image_touched == false) && (i < (this->images).size()); i++)
 	{
-		pos_X = images[i].getPosX();
-		pos_Y = images[i].getPosY();
-		if (((x >= pos_X) && (x <= (pos_X + image_sizeX))) && ((y >= pos_Y) && (y <= (pos_Y + image_sizeY)))) //si se toco una imagen
+		aux_pos_x = ((this->images)[i]).get_pos_x();
+		aux_pos_y = ((this->images)[i]).get_pos_y();
+
+		if (((cordx_touch >= aux_pos_x) && (cordx_touch <= (aux_pos_x + this->image_size_x))) && ((cordy_touch >= aux_pos_y) && (cordy_touch <= (aux_pos_y + image_size_y)))) //si se toco una imagen
 		{
-			imageTouched = true;
-			images[i].toggleSelected();
+			image_touched = true;
+			((this->images)[i]).toggle_selection();
 		}
 	}
 
-	if (!imageTouched)
+
+	if (image_touched == false)
 	{
-		bool botonTouched = false;
-		int inicio = 0;  //en principio, deseo tener en cuenta todo el vector de botones.
-		int finish = (int)buttons.size();
-		if (button_actual == 0) //primer damero
+		if (this->board_cant != 0)  //habilito botones si tengo mas de un damero 
 		{
-			inicio = 1; //salteo el primer boton.
-		}
-		else if (button_actual == button_cant) //ultimo damero
-		{
-			finish--; //descarto el último boton.
-		}
-		for (int i = inicio; (i < finish) && (!botonTouched); i++)
-		{
-			pos_X = buttons[i].getPosX();
-			pos_Y = buttons[i].getPosY();
-			if (((x >= pos_X) && (x <= (pos_X + image_sizeX))) && ((y >= pos_Y) && (y <= (pos_Y + image_sizeY)))) //si se toco una imagen
+			bool button_touched = false;
+
+			int begin = 0;  
+			int finish = (int) buttons.size();
+			
+			
+			if (this->board_actual == 0) //primer damero
 			{
-				botonTouched = true;
-				change_board(i);
-				refresh();
+				begin = 1; //deshabilito el primet boton
+			}
+			else if (this->board_actual == this->board_cant) //ultimo damero
+			{
+				finish--; //deshabilito el último boton
+			}
+			for (int i = begin; (i < finish) && (button_touched == false); i++)
+			{
+				aux_pos_x = buttons[i].get_pos_x();
+				aux_pos_y = buttons[i].get_pos_y();
+				
+				if (((cordx_touch >= aux_pos_x) && (cordx_touch <= (aux_pos_x + this->image_size_x))) && ((cordy_touch >= aux_pos_y) && (cordy_touch <= (aux_pos_y + this->image_size_y)))) //si se toco una imagen
+				{
+					button_touched = true;
+					change_board(i);
+					refresh();
+				}
 			}
 		}
+
 	}
 }
-void 
-board::select_all_images(void)
+
+//listo
+void board::select_all_images(void)
 {
-	for (int i = FIRST_IMG_OF_THIS_BOARD(button_actual); (i < LAST_IMG_OF_THIS_BOARD(button_actual)) && (i < images.size()); i++)
+	for (int i = FIRST_IMAGE_BOARD(this->board_actual); (i < LAST_IMAGE_BOARD(this->board_actual)) && (i < (this->images).size()); i++)
 	{
-		if (!(images[i].wasSelected()))
+		if (((this->images)[i].is_select()) == false)
 		{
-			images[i].toggleSelected();
+			images[i].toggle_selection();
 		}
 	}
 }
-void 
-board::unselect_all_images(void)
+
+//listo
+void board::unselect_all_images(void)
 {
-	for (int i = FIRST_IMG_OF_THIS_BOARD(button_actual); (i < LAST_IMG_OF_THIS_BOARD(button_actual)) && (i < images.size()); i++)
+
+	for (int i = FIRST_IMAGE_BOARD(this->board_actual); (i < LAST_IMAGE_BOARD(this->board_actual)) && (i < (this->images).size()); i++)
 	{
-		if ((images[i].wasSelected()))
+		if (((this->images)[i].is_select()) == true)
 		{
-			images[i].toggleSelected();
+			images[i].toggle_selection();
 		}
 	}
+	
 }
-bool 
-board::is_some_image_select(void)
+
+//listo
+bool board::is_some_image_select(void)
 {
-	bool Selected = false;
-	for (int i = 0; (i < images.size()) && !Selected; i++)
+	bool is_select_something = false;
+
+	for (int i = 0; (i < (this->images).size()) && (is_select_something == false) ; i++)
 	{
-		if (images[i].wasSelected())
+		if (images[i].is_select() == true)
 		{
-			Selected = true;
+			is_select_something = true;
 		}
 	}
-	return Selected;
+	return is_select_something;
 }
 
-
-
-void 
-board::set_image_size(int sizeX_, int sizeY_)
+//listo
+void board::set_image_size(int image_size_x, int image_size_y)
 {
-	image_sizeX = sizeX_;
-	image_sizeY = sizeY_;
-
-}
-void 
-board::set_boton_size(int SizeX, int SizeY)
-{
-	button_sizeX = SizeX;
-	button_sizeY = SizeY;
-}
-vector <ImageDescriptor> &
-board::get_images(void)
-{
-	return images;
-}
-vector <ImageDescriptor> &
-board::get_buttons(void)
-{
-	return buttons;
-}
-int 
-board::get_sizeX(void)
-{
-	return image_sizeX;
-}
-int 
-board::get_sizeY(void)
-{
-	return image_sizeY;
-}
-int 
-board::get_marginX(void)
-{
-	return marginX;
-}
-int 
-board::get_marginY(void)
-{
-	return marginY;
-}
-int 
-board::get_actual(void)
-{
-	return button_actual;
-}
-int 
-board::get_cant(void)
-{
-	return button_cant;
+	this->image_size_x = image_size_x;
+	this->image_size_y = image_size_y;
 }
 
-
-
-bool 
-board::images_error(void)
+//listo
+void board::set_button_size(int button_size_x, int button_size_y)
 {
-	bool errorFounded = false;
-	for (int i = 0; (i < images.size()) && (!errorFounded); i++)
+	this->button_size_x = button_size_x;
+	this->button_size_y = button_size_y;
+}
+
+//listo
+vector <image> & board::get_images(void)
+{
+	return (this->images);
+}
+
+//listo
+vector <button> & board::get_buttons(void)
+{
+	return (this->buttons);
+}
+
+//listo
+int board::get_size_x(void)
+{
+	return (this->image_size_x);
+}
+
+//listo
+int board::get_size_y(void)
+{
+	return (this->image_size_y);
+}
+
+//listo
+int board::get_margin_x(void)
+{
+	return (this->margin_x);
+}
+
+//listo
+int board::get_margin_y(void)
+{
+	return (this->margin_y);
+}
+
+//listo
+int board::get_actual_board(void)
+{
+	return (this->board_actual);
+}
+
+//listo
+int board::get_cant(void)
+{
+	return (this->board_cant);
+}
+
+//listo
+bool board::is_images_error(void)
+{
+	bool error = false;
+
+	for (int i = 0; (i < (this->images).size()) && (error == false); i++)
 	{
-		if (images[i].GetError())
+		if ((this->images)[i].get_error())
 		{
-			errorFounded = true;
+			error = true;
 		}
 	}
 
-	return errorFounded; //true si hubo error en alguna imagen.- false si esta todo bien.
+	return error;
 }
 
-void 
-board::change_board(int botonPressed_)
+
+
+
+//listo
+void board::change_board(int button_pressed)
 {
-	switch (botonPressed_)
+	switch (button_pressed)
 	{
-	case BOTON_LEFT:
-		button_actual--;
-		break;
-	case BOTON_RIGHT:
-		button_actual++;
-		break;
-	}
+		case BUTTON_LEFT:
+			(this->board_actual) = (this->board_actual) - 1;
+			break;
+		case BUTTON_RIGHT:
+			(this->board_actual) = (this->board_actual) + 1;
+			break;
+		}
 }
+

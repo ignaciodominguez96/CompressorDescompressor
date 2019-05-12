@@ -1,0 +1,16 @@
+#pragma once
+
+#ifndef IMAGE_MANAGER_H
+#define IMAGE_MANAGER_H
+
+#include <allegro5\allegro.h>
+#include <allegro5\allegro_image.h>
+
+void destroy_images(ALLEGRO_BITMAP ** images, unsigned int cant_images);
+
+ALLEGRO_BITMAP * resize_image(const char* path_image, int resize_x, int resize_y);
+
+
+
+#endif // !IMAGE_MANAGER_H
+
