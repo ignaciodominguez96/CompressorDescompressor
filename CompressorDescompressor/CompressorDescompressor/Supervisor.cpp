@@ -71,7 +71,7 @@ supervisor::~supervisor()
 	
 }
 
-
+//listo
 void supervisor::dispatcher(viewer& viewer, board& board)
 {
 	ALLEGRO_EVENT ev;
