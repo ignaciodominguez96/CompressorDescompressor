@@ -3,7 +3,7 @@
 #include <iostream>
 
 #include "descompresor.h"
-#include "compressor.h"
+#include "compresor.h"
 
 
 //auxiliar function

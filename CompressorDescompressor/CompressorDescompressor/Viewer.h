@@ -26,7 +26,7 @@
 class viewer //Se ocupa de todo lo relacionado con el output de la simulacion
 {
 public:
-	viewer(unsigned int width = WIDTH_DEFAULT, unsigned int height = HEIGHT_DEFAULT, double font_size = FONT_SIZE_DEFAULT, unsigned int mode);
+	viewer(unsigned int mode, unsigned int width = WIDTH_DEFAULT, unsigned int height = HEIGHT_DEFAULT, double font_size = FONT_SIZE_DEFAULT );
 	~viewer();
 	bool is_init(void);					 //listo
 	void update_display(board & board); //listo

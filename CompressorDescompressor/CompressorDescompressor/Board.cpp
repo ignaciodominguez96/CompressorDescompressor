@@ -4,7 +4,7 @@
 
 
 //listo
-board::board(int width, int height, vector<image>& images, vector<button> & buttons)
+board::board(int width, int height, vector<image>& images, vector<button> & buttons) : images(images), buttons(buttons)
 {
 	this->width = width;
 	this->height = height;
@@ -27,7 +27,7 @@ board::board(int width, int height, vector<image>& images, vector<button> & butt
 	
 
 
-	this->button_actual = 0;
+	this->board_actual =0;
 }
 
 //listo

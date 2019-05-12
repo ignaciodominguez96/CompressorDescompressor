@@ -17,7 +17,7 @@ bool init_allegro(void);			//inicializa allegro --- listo
 
 
 //listo
-viewer::viewer(unsigned int width, unsigned int height, double font_size, unsigned int mode)
+viewer::viewer(unsigned int mode, unsigned int width, unsigned int height, double font_size)
 {
 	
 
@@ -171,7 +171,7 @@ void viewer::print_board(board& board)
 
 	int size_x = board.get_size_x();
 	int size_y = board.get_size_y();
-	int actual_board = board.get_actual();
+	int actual_board = board.get_actual_board();
 
 	ALLEGRO_COLOR color = al_color_name(FONT_COLOR);
 
@@ -201,10 +201,10 @@ void viewer::print_board(board& board)
 
 		const char * text = (board.get_images())[i].get_name_file();
 
-		al_draw_text(this->font, color, pos_x + (IMAGE_SIZE_X / 2.0), pos_y + IMAGE_SIZE_Y + 10, ALLEGRO_ALIGN_CENTRE, );
+		al_draw_text(this->font, color, pos_x + (IMAGE_SIZE_X / 2.0), pos_y + IMAGE_SIZE_Y + 10, ALLEGRO_ALIGN_CENTRE, text);
 		
 		
-		bool image_selected = ((board).get_images())[i].was_selected();
+		bool image_selected = ((board).get_images())[i].is_select();
 
 		if (image_selected)
 		{
@@ -222,11 +222,11 @@ void viewer::print_board(board& board)
 		int first_button = 0;  //en principio, deseo tener en cuenta todo el vector de botones.
 		int last_button = (int)   (board).get_buttons().size();
 
-		if ((board).get_actual() == 0) //primer damero
+		if ((board).get_actual_board() == 0) //primer damero
 		{
 			first_button = 1; //salteo el primer boton.
 		}
-		else if ((board).get_actual() == (board).get_cant()) //ultimo damero
+		else if ((board).get_actual_board() == (board).get_cant()) //ultimo damero
 		{
 			last_button--; //descarto el último boton.
 		}
