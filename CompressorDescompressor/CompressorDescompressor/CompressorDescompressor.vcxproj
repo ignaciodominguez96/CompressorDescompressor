@@ -117,9 +117,6 @@
   <ItemGroup>
     <ClInclude Include="Board.h" />
     <ClInclude Include="Button.h" />
-    <ClInclude Include="compresor.h" />
-    <ClInclude Include="descompresor.h" />
-    <ClInclude Include="lodepng.h" />
     <ClInclude Include="Supervisor.h" />
     <ClInclude Include="ImageDescriptor.h" />
     <ClInclude Include="Image.h" />
@@ -132,11 +129,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Board.cpp" />
-    <ClCompile Include="compresor.cpp" />
-    <ClCompile Include="descompresor.cpp" />
+    <ClCompile Include="Image.cpp" />
     <ClCompile Include="ImageDescriptor.cpp" />
     <ClCompile Include="ImagesManager.cpp" />
-    <ClCompile Include="lodepng.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Supervisor.cpp" />
     <ClCompile Include="Viewer.cpp" />
