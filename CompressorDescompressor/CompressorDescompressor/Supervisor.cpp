@@ -7,7 +7,7 @@
 
 
 //auxiliar function
-void refresh_display(viewer& viewer, board& board);
+void refresh_display(viewer& viewer_, board& board_);
 
 
 //listo
@@ -76,6 +76,8 @@ void supervisor::dispatcher(viewer& viewer, board& board)
 {
 	ALLEGRO_EVENT ev;
 	al_get_next_event(ev_queue, &ev);
+	unsigned int key_pressed;
+
 
 	switch (ev.type)
 	{
@@ -106,7 +108,7 @@ void supervisor::dispatcher(viewer& viewer, board& board)
 		case ALLEGRO_KEY_8: 
 		case ALLEGRO_KEY_9:
 			
-			unsigned int key_pressed = ev.keyboard.keycode - ALLEGRO_KEY_1;
+			key_pressed = ev.keyboard.keycode - ALLEGRO_KEY_1;
 			
 			(board.get_images())[key_pressed].toggle_selection();
 
@@ -144,7 +146,7 @@ void supervisor::dispatcher(viewer& viewer, board& board)
 					{
 						if (mode == MODE_COMPRESSOR)
 						{
-							if (compress_image((vector_images[i]).get_path(), (vector_images[i]).get_heigth(), (vector_images[i]).get_width(), threshold))
+							if (compress(threshold, (vector_images[i]).get_path(), (vector_images[i]).get_heigth(), (vector_images[i]).get_width() ))
 							{
 								std::cout << "Compresion de: " << (vector_images[i]).get_path() << " lograda" << std::endl;
 							}
@@ -157,7 +159,7 @@ void supervisor::dispatcher(viewer& viewer, board& board)
 						}
 						else if (mode == MODE_DESCOMPRESSOR)
 						{
-							if (descompress_image((vector_images[i]).get_path()))
+							if (descompress((vector_images[i]).get_path()))
 							{
 								std::cout << "Descompresion de: " << (vector_images[i]).get_path() << " lograda" << std::endl;
 							}
@@ -217,9 +219,9 @@ bool supervisor::is_finish(void)
 }
 
 
-void refresh_display(viewer& viewer, board& board)
+void refresh_display(viewer& viewer_, board& board_)
 {
-	al_set_target_backbuffer(viewer.get_display());
-	viewer.update_display(board);
+	al_set_target_backbuffer(viewer_.get_display());
+	viewer_.update_display(board_);
 	al_flip_display();
 }

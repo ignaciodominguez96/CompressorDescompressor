@@ -2,11 +2,4 @@
 
 
 
-descompresor::descompresor()
-{
-}
 
-
-descompresor::~descompresor()
-{
-}
