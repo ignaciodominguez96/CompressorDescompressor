@@ -8,96 +8,138 @@ struct cuadrant { //each cuadrant has it minimum and maximum for each color
 enum types { RED = 1, GREEN, BLUE, ALPHA }; //simple enumeration
 
 /*Compress image*/
-bool image::compress(unsigned int puntajeDif) { 
+bool image::compress(unsigned int puntajeDif) {
 	std::vector<unsigned char> pixels = decode(get_path()); //decoding image to pixel vector
+	std::vector<unsigned char> subpixels = pixels; //vector with cuadrants
 	unsigned int w = get_width(); //getting size
 	unsigned int h = get_heigth();
-	cuadrant c1, c2, c3, c4; //creating cuadrants
-
-	//analizing first cuadrant
-	for (int j = 0; j < h / 2; j++) { //analizing each row (from row cero to the middle)
-		if (get_max(pixels, RED, j * w + w / 2, j * w + w) > c1.maxR) // (j * w) we get the row, then we add half a row so we are in the middle
-			c1.maxR = get_max(pixels, RED, j * w + w / 2, j * w + w); //analizing each pixel from the middle to the end
-		if (get_min(pixels, RED, j * w + w / 2, j * w + w) < c1.minR)
-		c1.minR = get_min(pixels, RED, j * w + w / 2, j * w + w);
-
-		if (get_max(pixels, GREEN, j * w + w / 2, j * w + w) > c1.maxG)
-			c1.maxG = get_max(pixels, GREEN, j * w + w / 2, j * w + w);
-		if (get_min(pixels, GREEN, j * w + w / 2, j * w + w) < c1.minG)
-			c1.minG = get_min(pixels, GREEN, j * w + w / 2, j * w + w);
-
-		if (get_max(pixels, BLUE, j * w + w / 2, j * w + w) > c1.maxB)
-			c1.maxB = get_max(pixels, BLUE, j * w + w / 2, j * w + w);
-		if (get_min(pixels, BLUE, j * w + w / 2, j * w + w) < c1.minB)
-			c1.minB = get_min(pixels, BLUE, j * w + w / 2, j * w + w);
-
-	}
-	c1.puntaje = c1.maxR - c1.minR + c1.maxG - c1.minG + c1.maxB - c1.minB;
-
-	//analizing second cuadrant
-	for (int j = 0; j < h / 2; j++) { //analizing each row (from row cero to the middle)
-		if (get_max(pixels, RED, j * w, j * w + w / 2) > c2.maxR) // (j * w) we get the row, and its till the half
-			c2.maxR = get_max(pixels, RED, j * w, j * w + w / 2); //analizing each pixel from the middle to the end
-		if (get_min(pixels, RED, j * w, j * w + w / 2) < c2.minR)
-			c2.minR = get_min(pixels, RED, j * w, j * w + w / 2);
-
-		if (get_max(pixels, GREEN, j * w, j * w + w / 2) > c2.maxG)
-			c2.maxG = get_max(pixels, GREEN, j * w, j * w + w / 2);
-		if (get_min(pixels, GREEN, j * w, j * w + w / 2) < c2.minG)
-			c2.minG = get_min(pixels, GREEN, j * w, j * w + w / 2);
-
-		if (get_max(pixels, BLUE, j * w, j * w + w / 2) > c2.maxB)
-			c2.maxB = get_max(pixels, BLUE, j * w, j * w + w / 2);
-		if (get_min(pixels, BLUE, j * w, j * w + w / 2) < c2.minB)
-			c2.minB = get_min(pixels, BLUE, j * w, j * w + w / 2);
-
-	}
-	c2.puntaje = c2.maxR - c2.minR + c2.maxG - c2.minG + c2.maxB - c2.minB;
-
-
-	/*esto lo termino luego*/
-	//analizing third cuadrant
-	for (int j = 0; j < h / 2; j++) { //analizing each row (from row cero to the middle)
-		if (get_max(pixels, RED, j * w + w / 2, j * w + w) > c3.maxR) // (j * w) we get the row, then we add half a row so we are in the middle
-			c3.maxR = get_max(pixels, RED, j * w + w / 2, j * w + w); //analizing each pixel from the middle to the end
-		if (get_min(pixels, RED, j * w + w / 2, j * w + w) < c3.minR)
-			c3.minR = get_min(pixels, RED, j * w + w / 2, j * w + w);
-
-		if (get_max(pixels, GREEN, j * w + w / 2, j * w + w) > c3.maxG)
-			c3.maxG = get_max(pixels, GREEN, j * w + w / 2, j * w + w);
-		if (get_min(pixels, GREEN, j * w + w / 2, j * w + w) < c3.minG)
-			c3.minG = get_min(pixels, GREEN, j * w + w / 2, j * w + w);
-
-		if (get_max(pixels, BLUE, j * w + w / 2, j * w + w) > c3.maxB)
-			c3.maxB = get_max(pixels, BLUE, j * w + w / 2, j * w + w);
-		if (get_min(pixels, BLUE, j * w + w / 2, j * w + w) < c3.minB)
-			c3.minB = get_min(pixels, BLUE, j * w + w / 2, j * w + w);
-
-	}
-	c3.puntaje = c3.maxR - c3.minR + c3.maxG - c3.minG + c3.maxB - c3.minB;
-
-	//analizing fourth cuadrant
-	for (int j = 0; j < h / 2; j++) { //analizing each row (from row cero to the middle)
-		if (get_max(pixels, RED, j * w + w / 2, j * w + w) > c4.maxR) // (j * w) we get the row, then we add half a row so we are in the middle
-			c4.maxR = get_max(pixels, RED, j * w + w / 2, j * w + w); //analizing each pixel from the middle to the end
-		if (get_min(pixels, RED, j * w + w / 2, j * w + w) < c4.minR)
-			c4.minR = get_min(pixels, RED, j * w + w / 2, j * w + w);
-
-		if (get_max(pixels, GREEN, j * w + w / 2, j * w + w) > c4.maxG)
-			c4.maxG = get_max(pixels, GREEN, j * w + w / 2, j * w + w);
-		if (get_min(pixels, GREEN, j * w + w / 2, j * w + w) < c4.minG)
-			c4.minG = get_min(pixels, GREEN, j * w + w / 2, j * w + w);
-
-		if (get_max(pixels, BLUE, j * w + w / 2, j * w + w) > c4.maxB)
-			c4.maxB = get_max(pixels, BLUE, j * w + w / 2, j * w + w);
-		if (get_min(pixels, BLUE, j * w + w / 2, j * w + w) < c4.minB)
-			c4.minB = get_min(pixels, BLUE, j * w + w / 2, j * w + w);
-
-	}
-	c4.puntaje = c4.maxR - c4.minR + c4.maxG - c4.minG + c4.maxB - c4.minB;
+	unsigned int times = 0;
 	
+	analize_cuad(w, h, pixels, puntajeDif, times); //always start times in 0
 
 }
+
+void analize_cuad(unsigned int w, unsigned int h, std::vector<unsigned char> pixels,unsigned int puntajeDif, unsigned int times) {
+	cuadrant c1, c2, c3, c4;
+	std::vector<unsigned char> subpixels;
+	c1.puntaje = copy_q1(c1, w, h, pixels, subpixels); //copying first cuadrant from pixels to subpixels
+	if (c1.puntaje > puntajeDif) { //we have to analize again
+		analize_cuad(w / 2, h / 2, subpixels, puntajeDif, times + 1); //calling this function with half the hight and width and incrementing times
+	}
+	c2.puntaje = copy_q2(c2, w, h, pixels, subpixels); //copying second cuadrant from pixels to subpixels
+	if (c2.puntaje > puntajeDif) { //we have to analize again
+		analize_cuad(w / 2, h / 2, subpixels, puntajeDif, times + 1); //calling this function with half the hight and width and incrementing times
+	}
+	c3.puntaje = copy_q3(c3, w, h, pixels, subpixels); //copying third cuadrant from pixels to subpixels
+	if (c3.puntaje > puntajeDif) { //we have to analize again
+		analize_cuad(w / 2, h / 2, subpixels, puntajeDif, times + 1); //calling this function with half the hight and width and incrementing times
+	}
+	c4.puntaje = copy_q4(c1, w, h, pixels, subpixels); //copying fourth cuadrant from pixels to subpixels
+	if (c1.puntaje > puntajeDif) { //we have to analize again
+		analize_cuad(w / 2, h / 2, subpixels, puntajeDif, times + 1); //calling this function with half the hight and width and incrementing times
+	}
+
+	/*Create node*/
+	//aca hay que crear el nodo
+}
+
+
+unsigned int copy_q1(cuadrant c1, unsigned int w, unsigned int h, std::vector<unsigned char> pixels, std::vector<unsigned char> subpixels) {
+	int k = 0;
+
+	for (int j = 0; j < h / 2; j++) { //we copy from the start to the half (vertically)
+		for (int i = w / 2; i < w; i++) { //we copy from the half to the end (horizontally)
+			for (int l = RED; l <= ALPHA; l++) {
+				subpixels[k] = pixels[j*h*ALPHA + i * ALPHA + l]; //we move in rows (j*h) and then in items in that row (+i) and then in bytes in that item
+				k++;
+			}
+		}
+	}
+
+	/*Now we evaluate the score*/
+	c1.minR = get_min(subpixels, RED, 0, w*h);
+	c1.maxR = get_max(subpixels, RED, 0, w*h);
+	c1.minG = get_min(subpixels, GREEN, 0, w*h);
+	c1.maxG = get_max(subpixels, GREEN, 0, w*h);
+	c1.minB = get_min(subpixels, BLUE, 0, w*h);
+	c1.maxB = get_max(subpixels, BLUE, 0, w*h);
+
+	c1.puntaje = c1.maxR - c1.minR + c1.maxG - c1.minG + c1.maxB - c1.minB;
+	return c1.puntaje;
+}
+
+unsigned int copy_q2(cuadrant c2, unsigned int w, unsigned int h, std::vector<unsigned char> pixels, std::vector<unsigned char> subpixels) {
+	int k = 0;
+
+	for (int j = 0; j < h / 2; j++) { //we copy from the start to the half (vertically)
+		for (int i = 0; i < w / 2; i++) { //we copy from the start to the half (horizontally)
+			for (int l = RED; l <= ALPHA; l++) {
+				subpixels[k] = pixels[j*h*ALPHA + i * ALPHA + l]; //we move in rows (j*h) and then in items in that row (+i) and then in bytes in that item
+				k++;
+			}
+		}
+	}
+
+	/*Now we evaluate the score*/
+	c2.minR = get_min(subpixels, RED, 0, w*h);
+	c2.maxR = get_max(subpixels, RED, 0, w*h);
+	c2.minG = get_min(subpixels, GREEN, 0, w*h);
+	c2.maxG = get_max(subpixels, GREEN, 0, w*h);
+	c2.minB = get_min(subpixels, BLUE, 0, w*h);
+	c2.maxB = get_max(subpixels, BLUE, 0, w*h);
+
+	c2.puntaje = c2.maxR - c2.minR + c2.maxG - c2.minG + c2.maxB - c2.minB;
+	return c2.puntaje;
+}
+
+unsigned int copy_q3(cuadrant c3, unsigned int w, unsigned int h, std::vector<unsigned char> pixels, std::vector<unsigned char> subpixels) {
+	int k = 0;
+
+	for (int j = h / 2; j < h; j++) { //we copy from the half to the end (vertically)
+		for (int i = 0; i < w / 2; i++) { //we copy from the start to the half (horizontally)
+			for (int l = RED; l <= ALPHA; l++) {
+				subpixels[k] = pixels[j*h*ALPHA + i * ALPHA + l]; //we move in rows (j*h) and then in items in that row (+i) and then in bytes in that item
+				k++;
+			}
+		}
+	}
+
+	/*Now we evaluate the score*/
+	c3.minR = get_min(subpixels, RED, 0, w*h);
+	c3.maxR = get_max(subpixels, RED, 0, w*h);
+	c3.minG = get_min(subpixels, GREEN, 0, w*h);
+	c3.maxG = get_max(subpixels, GREEN, 0, w*h);
+	c3.minB = get_min(subpixels, BLUE, 0, w*h);
+	c3.maxB = get_max(subpixels, BLUE, 0, w*h);
+
+	c3.puntaje = c3.maxR - c3.minR + c3.maxG - c3.minG + c3.maxB - c3.minB;
+	return c3.puntaje;
+}
+
+unsigned int copy_q4(cuadrant c4, unsigned int w, unsigned int h, std::vector<unsigned char> pixels, std::vector<unsigned char> subpixels) {
+	int k = 0;
+
+	for (int j = h / 2; j < h ; j++) { //we copy from the half to the end (vertically)
+		for (int i = w / 2; i < w; i++) { //we copy from the half to the end (horizontally)
+			for (int l = RED; l <= ALPHA; l++) {
+				subpixels[k] = pixels[j*h*ALPHA + i * ALPHA + l]; //we move in rows (j*h) and then in items in that row (+i) and then in bytes in that item
+				k++;
+			}
+		}
+	}
+
+	/*Now we evaluate the score*/
+	c4.minR = get_min(subpixels, RED, 0, w*h);
+	c4.maxR = get_max(subpixels, RED, 0, w*h);
+	c4.minG = get_min(subpixels, GREEN, 0, w*h);
+	c4.maxG = get_max(subpixels, GREEN, 0, w*h);
+	c4.minB = get_min(subpixels, BLUE, 0, w*h);
+	c4.maxB = get_max(subpixels, BLUE, 0, w*h);
+
+	c4.puntaje = c4.maxR - c4.minR + c4.maxG - c4.minG + c4.maxB - c4.minB;
+	return c4.puntaje;
+}
+
 
 /*Decompress image*/
 bool image::decompress() {
