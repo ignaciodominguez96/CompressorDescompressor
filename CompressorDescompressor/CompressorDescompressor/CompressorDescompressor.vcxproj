@@ -129,8 +129,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Board.cpp" />
+    <ClCompile Include="Image.cpp" />
     <ClCompile Include="ImageDescriptor.cpp" />
     <ClCompile Include="ImagesManager.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="Supervisor.cpp" />
     <ClCompile Include="Viewer.cpp" />
     <ClCompile Include="SearchFile.cpp" />

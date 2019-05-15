@@ -57,7 +57,7 @@ private:
 
 	bool error;
 
-	unsigned int  width;
+	unsigned int width;
 	unsigned int height;
 
 
