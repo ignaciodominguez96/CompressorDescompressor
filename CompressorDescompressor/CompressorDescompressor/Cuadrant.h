@@ -8,7 +8,7 @@
 #define MAX_VALUE	255 //0xFF
 #define MIN_VALUE	0	//0x00
 
-enum types { RED = 0, GREEN, BLUE }; //simple enumeration
+enum types { RED = 0, GREEN, BLUE }; 
 
 
 typedef struct { //each cuadrant has it minimum and maximum for each color

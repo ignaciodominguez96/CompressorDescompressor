@@ -8,10 +8,7 @@
 
 #define SKIP_BITS 3
 
-#define ID_CUADRANT1 1
-#define ID_CUADRANT2 2
-#define ID_CUADRANT3 3
-#define ID_CUADRANT4 4
+
 
 
 
@@ -22,7 +19,7 @@ void algorithm_compression_quad_tree(unsigned int threshold_compression, fsystem
 
 bool fill_cuadrant(std::vector<unsigned char>& original_image, unsigned int original_size, std::vector<unsigned char>& cuadrant, unsigned int id_cuadrant);
 
-
+//
 
 
 bool compress(unsigned int threshold_compression, const char * path_image, unsigned int image_width, unsigned int image_height) 

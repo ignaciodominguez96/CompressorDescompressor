@@ -8,10 +8,7 @@
 #include "lodepng.h"
 #include "boost\filesystem.hpp"
 
-#define TYPE_OF_COMPRESS_FILE ".compr"
-
-#define CHAR_INDICATE_DIVISION		'D'
-#define CHAR_INDICATE_OK_AVERAGE	'A'
+#include "Definitions.h"
 
 namespace fsystem = boost::filesystem;
 

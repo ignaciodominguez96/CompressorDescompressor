@@ -116,12 +116,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Board.h" />
-    <ClInclude Include="Button.h" />
     <ClInclude Include="Compressor.h" />
     <ClInclude Include="Cuadrant.h" />
+    <ClInclude Include="Definitions.h" />
+    <ClInclude Include="Descompressor.h" />
+    <ClInclude Include="Parser.h" />
     <ClInclude Include="Supervisor.h" />
     <ClInclude Include="ImageDescriptor.h" />
-    <ClInclude Include="Image.h" />
     <ClInclude Include="ImagesManager.h" />
     <ClInclude Include="Viewer.h" />
     <ClInclude Include="SearchFile.h" />
@@ -133,10 +134,11 @@
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="Compressor.cpp" />
     <ClCompile Include="Cuadrant.cpp" />
-    <ClCompile Include="Image.cpp" />
+    <ClCompile Include="Descompressor.cpp" />
     <ClCompile Include="ImageDescriptor.cpp" />
     <ClCompile Include="ImagesManager.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Parser.cpp" />
     <ClCompile Include="Supervisor.cpp" />
     <ClCompile Include="Viewer.cpp" />
     <ClCompile Include="SearchFile.cpp" />

@@ -2,8 +2,8 @@
 
 #include <iostream>
 
-#include "descompresor.h"
-#include "compresor.h"
+#include "Compressor.h"
+#include "Descompressor.h"
 
 
 //auxiliar function

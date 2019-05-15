@@ -10,17 +10,9 @@
 
 #include "ImagesManager.h"
 #include "Board.h"
+#include "Definitions.h"
 
 
-#define UNIT 1
-
-#define WIDTH_DEFAULT 1000
-#define HEIGHT_DEFAULT 600
-#define FONT_SIZE_DEFAULT 15
-
-
-#define MODE_COMPRESSOR		0
-#define MODE_DESCOMPRESSOR	1
 
 
 class viewer //Se ocupa de todo lo relacionado con el output de la simulacion
