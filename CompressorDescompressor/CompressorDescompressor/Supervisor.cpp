@@ -217,6 +217,8 @@ bool supervisor::is_finish(void)
 }
 
 
+//auxiliar function
+//listo
 void refresh_display(viewer& viewer, board& board)
 {
 	al_set_target_backbuffer(viewer.get_display());
