@@ -28,6 +28,20 @@ int main(int argc, char* argv[])
 	userData_t userData;
 	int all_ok = OK;
 
+	cout << "Bienvenido al Compresor & Descompresor de Imagenes" << endl<<endl;
+	cout << "Para ingresar al mismo debe pasar por linea de comando en el siguiente formato:" << endl<<endl;
+	cout << "mode path threshold(opcional)" << endl<<endl;
+	cout << "Referencias de cada parametro:" << endl;
+	cout << "--mode: determina si se va a utilizar el compresor (ingresar mode = " << MODE_COMPRESSOR << " )" << endl;
+	cout << " o descompresor (ingresar mode = " << MODE_DESCOMPRESSOR << " )" << endl;
+	cout << "--path: lugar donde se encuentran los archivos sobre las que quiero accionar" <<endl;
+	cout << " (tener que en cuenta que se pone como carpeta raiz a la carpeta donde se " << endl;
+	cout << "ejecuta este proyecto)" << endl;
+	cout << "--threshold: es un numero entre " << MIN_THRESHOLD_PORC << " y " << MAX_THRESHOLD_PORC << "  para indicar el porcentaje de " <<  endl;
+	cout << "compresion que se quiere realizar (si se pone el modo de de descompresion," << endl;
+	cout << " no se tendra en cuenta, podria no ponerse" << endl<<endl;
+
+
 	if (parserCmd(argc, argv, userData) == true)
 	{
 		if (userData.mode == MODE_COMPRESSOR)
@@ -145,8 +159,11 @@ int main(int argc, char* argv[])
 	if (all_ok == ERROR)
 	{
 		al_rest(TIME_TO_SEE_MSSG_ERROR);
+		cout << "Presionar ENTER para salir" << endl << endl;
+		getchar();
 	}
 
+	cout << "Presionar ENTER para salir" << endl << endl;
 
 	return all_ok;
 }

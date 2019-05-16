@@ -127,6 +127,7 @@
     <ClInclude Include="Cuadrant.h" />
     <ClInclude Include="Definitions.h" />
     <ClInclude Include="Descompressor.h" />
+    <ClInclude Include="file_access.h" />
     <ClInclude Include="lodepng.h" />
     <ClInclude Include="Parser.h" />
     <ClInclude Include="Supervisor.h" />
@@ -143,6 +144,7 @@
     <ClCompile Include="Compressor.cpp" />
     <ClCompile Include="Cuadrant.cpp" />
     <ClCompile Include="Descompressor.cpp" />
+    <ClCompile Include="file_access.cpp" />
     <ClCompile Include="ImageDescriptor.cpp" />
     <ClCompile Include="ImagesManager.cpp" />
     <ClCompile Include="lodepng.cpp" />

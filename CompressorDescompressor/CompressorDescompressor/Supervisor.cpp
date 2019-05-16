@@ -149,7 +149,7 @@ void supervisor::dispatcher(viewer& viewer, board& board)
 					{
 						if (mode == MODE_COMPRESSOR)
 						{
-							if (compress(threshold, (vector_images[i]).get_path(), (vector_images[i]).get_heigth(), (vector_images[i]).get_width() ))
+							if (compress_image((vector_images[i]).get_path(), (vector_images[i]).get_path(), threshold))
 							{
 								std::cout << "Compresion de: " << (vector_images[i]).get_path() << " lograda" << std::endl;
 							}
@@ -162,7 +162,7 @@ void supervisor::dispatcher(viewer& viewer, board& board)
 						}
 						else if (mode == MODE_DESCOMPRESSOR)
 						{
-							if (descompress((vector_images[i]).get_path()))
+							if (descompress_image((vector_images[i]).get_path(), (vector_images[i]).get_path()))
 							{
 								std::cout << "Descompresion de: " << (vector_images[i]).get_path() << " lograda" << std::endl;
 							}

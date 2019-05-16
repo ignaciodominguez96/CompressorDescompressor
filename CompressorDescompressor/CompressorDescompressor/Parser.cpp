@@ -24,7 +24,7 @@ bool parserCmd(int argc, char ** argv, userData_t & userData)
 	{
 		int mode = atoi(argv[POSITION_PARAMETER_MODE]);
 
-		if (mode == MODE_COMPRESSOR)
+		if (mode == MODE_COMPRESSOR && (argc == CANT_ELEMENTS_PER_CMD ))
 		{
 			userData.mode = mode;
 
