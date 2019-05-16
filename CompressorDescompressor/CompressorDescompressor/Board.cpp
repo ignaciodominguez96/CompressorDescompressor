@@ -4,7 +4,7 @@
 
 
 //listo
-board::board(int width, int height, vector<ImageDescriptor>& images, vector<ImageDescriptor> & buttons)
+board::board(int width, int height, vector<ImageDescriptor> & images)
 {
 	this->width = width;
 	this->height = height;
@@ -13,9 +13,12 @@ board::board(int width, int height, vector<ImageDescriptor>& images, vector<Imag
 	this->margin_y = height * MARGIN_RATE;
 
 	this->images = images;
+	
+	this->buttons.resize((size_t)CANT_BUTTONS);
 
-	buttons[BUTTON_LEFT].set_pos(BUTTON_SIZE_X * MARGIN_RATE, this->height - BUTTON_SIZE_Y);
-	buttons[BUTTON_RIGHT].set_pos(this->height - (BUTTON_SIZE_X * 2) - ((BUTTON_SIZE_X * MARGIN_RATE) * 3), this->height - BUTTON_SIZE_Y - (BUTTON_SIZE_Y * MARGIN_RATE));
+	(this->buttons[BUTTON_LEFT]).set_pos(BUTTON_SIZE_X * MARGIN_RATE, this->height - BUTTON_SIZE_Y);
+	(this->buttons[BUTTON_RIGHT]).set_pos(this->height - (BUTTON_SIZE_X * 2) - ((BUTTON_SIZE_X * MARGIN_RATE) * 3), this->height - BUTTON_SIZE_Y - (BUTTON_SIZE_Y * MARGIN_RATE));
+
 
 	this->board_cant = (int)( (this->images).size() / MAX_IMAGES_IN_THE_BOARD);
 
@@ -23,8 +26,6 @@ board::board(int width, int height, vector<ImageDescriptor>& images, vector<Imag
 	{
 		(this->board_cant)--;
 	}							
-
-	
 
 
 	this->board_actual = 0;
@@ -38,10 +39,10 @@ board::~board()
 //listo
 void board::refresh(void)
 {
-	int aux_pos_x = this->margin_x; 
-	int aux_pos_y = this->margin_y;
+	unsigned int aux_pos_x = this->margin_x;
+	unsigned int aux_pos_y = this->margin_y;
 
-	for (int i = FIRST_IMAGE_BOARD(this->board_actual); (i < LAST_IMAGE_BOARD(this->board_actual)) && (i < (this->images).size()); i++)
+	for (unsigned int i = FIRST_IMAGE_BOARD(this->board_actual); (i < LAST_IMAGE_BOARD(this->board_actual)) && (i < (this->images).size()); i++)
 	{
 
 		int image_size = this->image_size_x;
@@ -60,15 +61,15 @@ void board::refresh(void)
 }
 
 //listo
-void board::touch(int cordx_touch, int cordy_touch)
+void board::touch(unsigned int cordx_touch, unsigned int cordy_touch)
 {
 	bool image_touched = false;
 	
 	
-	int aux_pos_x = 0;
-	int aux_pos_y = 0;
+	unsigned int aux_pos_x = 0;
+	unsigned int aux_pos_y = 0;
 
-	for (int i = FIRST_IMAGE_BOARD(this->board_actual); (i < LAST_IMAGE_BOARD(this->board_actual)) && (image_touched == false) && (i < (this->images).size()); i++)
+	for (unsigned int i = FIRST_IMAGE_BOARD(this->board_actual); (i < LAST_IMAGE_BOARD(this->board_actual)) && (image_touched == false) && (i < (this->images).size()); i++)
 	{
 		aux_pos_x = ((this->images)[i]).get_pos_x();
 		aux_pos_y = ((this->images)[i]).get_pos_y();
@@ -119,7 +120,7 @@ void board::touch(int cordx_touch, int cordy_touch)
 //listo
 void board::select_all_images(void)
 {
-	for (int i = FIRST_IMAGE_BOARD(this->board_actual); (i < LAST_IMAGE_BOARD(this->board_actual)) && (i < (this->images).size()); i++)
+	for (unsigned int i = FIRST_IMAGE_BOARD(this->board_actual); (i < LAST_IMAGE_BOARD(this->board_actual)) && (i < (this->images).size()); i++)
 	{
 		if (((this->images)[i].is_select()) == false)
 		{
@@ -132,7 +133,7 @@ void board::select_all_images(void)
 void board::unselect_all_images(void)
 {
 
-	for (int i = FIRST_IMAGE_BOARD(this->board_actual); (i < LAST_IMAGE_BOARD(this->board_actual)) && (i < (this->images).size()); i++)
+	for (unsigned int i = FIRST_IMAGE_BOARD(this->board_actual); (i < LAST_IMAGE_BOARD(this->board_actual)) && (i < (this->images).size()); i++)
 	{
 		if (((this->images)[i].is_select()) == true)
 		{
@@ -147,7 +148,7 @@ bool board::is_some_image_select(void)
 {
 	bool is_select_something = false;
 
-	for (int i = 0; (i < (this->images).size()) && (is_select_something == false) ; i++)
+	for (unsigned int i = 0; (i < (this->images).size()) && (is_select_something == false) ; i++)
 	{
 		if (images[i].is_select() == true)
 		{
@@ -158,14 +159,14 @@ bool board::is_some_image_select(void)
 }
 
 //listo
-void board::set_image_size(int image_size_x, int image_size_y)
+void board::set_image_size(unsigned int image_size_x, unsigned int image_size_y)
 {
 	this->image_size_x = image_size_x;
 	this->image_size_y = image_size_y;
 }
 
 //listo
-void board::set_button_size(int button_size_x, int button_size_y)
+void board::set_button_size(unsigned int button_size_x, unsigned int button_size_y)
 {
 	this->button_size_x = button_size_x;
 	this->button_size_y = button_size_y;
@@ -224,7 +225,7 @@ bool board::is_images_error(void)
 {
 	bool error = false;
 
-	for (int i = 0; (i < (this->images).size()) && (error == false); i++)
+	for (unsigned int i = 0; (i < (this->images).size()) && (error == false); i++)
 	{
 		if ((this->images)[i].get_error())
 		{

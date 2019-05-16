@@ -208,9 +208,9 @@ bool fill_cuadrant(std::vector<unsigned char>& original_image, unsigned int orig
 		}
 
 
-	for (int i = index_i_init, k = 0; i < index_i_finish; i++, k++)
+	for (unsigned int i = index_i_init, k = 0; i < index_i_finish; i++, k++)
 	{
-		for (int j = index_j_init, l = 0; j < index_j_finish; j++, l++)
+		for (unsigned int j = index_j_init, l = 0; j < index_j_finish; j++, l++)
 		{
 			cuadrant[k + l * (original_size * 2)] = original_image[i + j * (original_size * 4)];
 		}

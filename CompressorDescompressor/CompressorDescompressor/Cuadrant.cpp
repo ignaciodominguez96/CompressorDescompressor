@@ -91,7 +91,7 @@ unsigned int cuadrant::get_blue_avg(void) {
 void set_min_max_image_auxiliar(std::vector<unsigned char>& image, unsigned int step, unsigned int color, unsigned int & max, unsigned int & min)
 {
 
-	for (int i = color; (i < image.size()); i += (step + 1))
+	for (unsigned int i = color; (i < image.size()); i += (step + 1))
 	{
 		if (image[i] > max)
 		{

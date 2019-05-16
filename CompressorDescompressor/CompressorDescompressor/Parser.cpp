@@ -3,6 +3,8 @@
 #include <iostream>
 #include <sstream>
 
+
+
 //auxiliar functions
 int interpret_threshold(double threshold_cmd);
 double string_to_double(const char * num_string);
@@ -27,13 +29,13 @@ bool parserCmd(int argc, char ** argv, userData_t & userData)
 
 			double threshold_cmd = string_to_double(argv[POSITION_PARAMETER_THRESHOLD]); //ultimo parametro es el threshold
 
-			if ((threshold_cmd >= MIN_THRESHOLD) && (threshold_cmd <= MAX_THRESHOLD))
+			if ((threshold_cmd >= MIN_THRESHOLD_PORC) && (threshold_cmd <= MAX_THRESHOLD_PORC))
 			{
 				userData.threshold = interpret_threshold(threshold_cmd);
 			}
 			else
 			{
-				cout << "Threshold (2do parametro) debe ser un numero entre " << MIN_THRESHOLD << " y " << MAX_THRESHOLD << endl;
+				cout << "Threshold (2do parametro) debe ser un numero entre " << MIN_THRESHOLD_PORC << " y " << MAX_THRESHOLD_PORC << endl;
 				can_parse = false;
 			}
 		}

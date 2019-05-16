@@ -77,7 +77,7 @@ void supervisor::dispatcher(viewer& viewer, board& board)
 	ALLEGRO_EVENT ev;
 	al_get_next_event(ev_queue, &ev);
 	unsigned int key_pressed;
-
+	std::vector<ImageDescriptor> & vector_images = board.get_images();
 
 	switch (ev.type)
 	{
@@ -110,7 +110,9 @@ void supervisor::dispatcher(viewer& viewer, board& board)
 			
 			key_pressed = ev.keyboard.keycode - ALLEGRO_KEY_1;
 			
-			(board.get_images())[key_pressed].toggle_selection();
+			vector_images = board.get_images();
+
+			(vector_images)[key_pressed].toggle_selection();
 
 			refresh_display(viewer, board);
 
@@ -138,11 +140,12 @@ void supervisor::dispatcher(viewer& viewer, board& board)
 				al_flip_display(); 
 
 
-				std::vector<ImageDescriptor>& vector_images = board.get_images();
 				
-				for (int i = 0; i < (vector_images).size(); i++)
+
+
+				for (unsigned int i = 0; i < vector_images.size(); i++)
 				{
-					if (vector_images[i].is_select())
+					if ((vector_images[i]).is_select())
 					{
 						if (mode == MODE_COMPRESSOR)
 						{

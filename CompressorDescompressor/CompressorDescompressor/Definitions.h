@@ -3,10 +3,11 @@
 
 #include <string>
 
-#define MAX_THRESHOLD	100
-#define MIN_THRESHOLD	0
-
 #define THRESHOLD_RATE 7.65
+
+#define MAX_THRESHOLD_PORC	100
+#define MIN_THRESHOLD_PORC	0
+
 
 #define TYPE_OF_COMPRESS_FILE ".compr"
 
@@ -20,8 +21,8 @@
 #define ID_CUADRANT3 3
 #define ID_CUADRANT4 4
 
-#define MODE_COMPRESSOR		0
-#define MODE_DESCOMPRESSOR	1
+#define MODE_COMPRESSOR		1
+#define MODE_DESCOMPRESSOR	2
 
 #define MARGIN_RATE 0.1
 #define UNIT 1
@@ -43,8 +44,8 @@
 #define CANT_ELEMENTS_PER_CMD (CANT_ELEMENTS_INPUT + 1)
 
 
-#define PATH_BUTTON_LEFT	"../EDA-TP8/botones/boton_left.png"
-#define PATH_BUTTON_RIGHT	 "../EDA-TP8/botones/boton_right.png"
+#define PATH_BUTTON_LEFT	"boton_left.png"
+#define PATH_BUTTON_RIGHT	 "boton_right.png"
 
 typedef struct
 {

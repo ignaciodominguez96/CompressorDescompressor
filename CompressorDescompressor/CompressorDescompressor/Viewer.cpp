@@ -7,7 +7,7 @@
 #define FONT_PATH "Font.ttf"
 #define FONT_COLOR "white"
 
-#define IMAGE_DESCOMPRESSOR_PATH "iconMet.png"
+#define IMAGE_DESCOMPRESSOR_PATH "icon_compress.png"
 
 #define MARKER_WIDTH 10
 
@@ -166,30 +166,33 @@ bool viewer::init_allegro_elements(const char* path_background, const char* font
 void viewer::print_board(board& board)
 {
 
-	int pos_x = 0;
-	int pos_y = 0;
+	unsigned int pos_x = 0;
+	unsigned int pos_y = 0;
 
-	int size_x = board.get_size_x();
-	int size_y = board.get_size_y();
-	int actual_board = board.get_actual_board();
+	unsigned int size_x = board.get_size_x();
+	unsigned int size_y = board.get_size_y();
+	unsigned int actual_board = board.get_actual_board();
 
 	ALLEGRO_COLOR color = al_color_name(FONT_COLOR);
 
 	ALLEGRO_BITMAP * aux_bitmap = NULL;
 
+	std::vector<ImageDescriptor> & vector_images = board.get_images();
 
 
-	for (int i = FIRST_IMAGE_BOARD(actual_board); (i < LAST_IMAGE_BOARD(actual_board)) && (i < (board).get_images().size()); i++)
+
+
+	for (unsigned int i = FIRST_IMAGE_BOARD(actual_board); (i < LAST_IMAGE_BOARD(actual_board)) && (i < vector_images.size()); i++)
 	{
-		pos_x = ((board).get_images())[i].get_pos_x();
-		pos_y = ((board).get_images())[i].get_pos_y();
+		pos_x = (vector_images)[i].get_pos_x();
+		pos_y = (vector_images)[i].get_pos_y();
 
 
 		
 
 		if (this->mode == MODE_COMPRESSOR)
 		{
-			 aux_bitmap = ((board).get_images())[i].get_bitmap();
+			 aux_bitmap = (vector_images)[i].get_bitmap();
 		}
 		else if (this->mode == MODE_DESCOMPRESSOR)
 		{

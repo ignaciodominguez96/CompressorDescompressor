@@ -7,7 +7,7 @@
 
 #define ELEMENTS_IN_RGBA 4
 
-
+#define TRUE 1
 
 enum offset { RED_OFFSET = 0, GREEN_OFFSET, BLUE_OFFSET, ALPHA_OFFSET};
 
@@ -59,9 +59,9 @@ bool descompress(const char * path_image)
 
 	draw_png(size, file_bmp, vect, image_bmp);
 
-	unsigned error = lodepng::encode(image_new_filename, image_bmp, size, size);
+	unsigned int error = lodepng::encode(image_new_filename, image_bmp, size, size);
 
-	if (error == true)
+	if (error == TRUE)
 	{
 		std::cout << "DECODER LODE error " << error << ": " << lodepng_error_text(error) << std::endl;
 		can_descompress = false;
@@ -80,7 +80,7 @@ void draw_png(unsigned int size, fsystem::ifstream& file_bmp, std::vector<unsign
 	char green;
 	char blue;
 
-	char alpha = 255;
+	char alpha = (char) 255;
 
 	actual_char = file_bmp.get();
 
@@ -134,7 +134,7 @@ void print_code_RGBA(std::vector<unsigned int>& vector, unsigned int size, std::
 	unsigned int correlation_x;
 	unsigned int correlation_y;
 
-	unsigned int actual_size = size / pow(2, vector.size());	// largo del cuadrado que voy a dibjar, calculado en base a el nivel en el que me encuentro
+	unsigned int actual_size = (unsigned int) (size / pow(2, vector.size()));	// largo del cuadrado que voy a dibjar, calculado en base a el nivel en el que me encuentro
 																
 	get_correlation(correlation_x, correlation_y, vector, size); //busco el (0,0) relativo para ese cuadrante 
 
@@ -162,7 +162,7 @@ void get_correlation(unsigned int& correlation_x, unsigned int& correlation_y, s
 	correlation_x = 0;
 	correlation_y = 0;
 
-	for (int actual_level = 1; actual_level <= vector.size(); actual_level++) // va sumando los corrimientos para cad anivel hasta llegar al actual
+	for (unsigned int actual_level = 1; actual_level <= vector.size(); actual_level++) // va sumando los corrimientos para cad anivel hasta llegar al actual
 	{
 		unsigned int cuadrant_id;
 
@@ -183,14 +183,14 @@ void get_correlation(unsigned int& correlation_x, unsigned int& correlation_y, s
 			case ID_CUADRANT1:
 				break;
 			case ID_CUADRANT2:
-				correlation_x += (size / pow(2, actual_level)) * ELEMENTS_IN_RGBA;
+				correlation_x += (unsigned int) (size / pow(2, actual_level)) * ELEMENTS_IN_RGBA;
 				break;
 			case ID_CUADRANT3:
-				correlation_y += size / pow(2, actual_level);
+				correlation_y += (unsigned int) (size / pow(2, actual_level));
 				break;
 			case ID_CUADRANT4:
-				correlation_x += (size / pow(2, actual_level)) * ELEMENTS_IN_RGBA;
-				correlation_y += size / pow(2, actual_level);
+				correlation_x += (unsigned int) ((size / pow(2, actual_level)) * ELEMENTS_IN_RGBA);
+				correlation_y += (unsigned int) (size / pow(2, actual_level));
 				break;
 			}
 	}

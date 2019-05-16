@@ -10,6 +10,7 @@
 
 #define MAX_IMAGES_IN_THE_BOARD 9
 
+#define CANT_BUTTONS 2
 #define BUTTON_LEFT 0  //indices correspondientes al vector de botones.
 #define BUTTON_RIGHT 1
 
@@ -19,18 +20,18 @@
 class board
 {
 	public:
-		board(int width, int height, vector<ImageDescriptor>& images, vector<ImageDescriptor> & buttons);
+		board(int width, int height, vector<ImageDescriptor> & images);
 		~board();
 
 		void refresh(void);
-		void touch(int x, int y);
+		void touch(unsigned int cordx_touch, unsigned int cordy_touch);
 
 		void select_all_images(void);
 		void unselect_all_images(void);
 		bool is_some_image_select(void);
 
-		void set_image_size(int sizeX_, int sizeY_);
-		void set_button_size(int botonSizeX, int botonSizeY);
+		void set_image_size(unsigned int sizeX_, unsigned int sizeY_);
+		void set_button_size(unsigned int botonSizeX, unsigned int botonSizeY);
 
 		vector <ImageDescriptor> & get_images(void);
 		vector <ImageDescriptor> & get_buttons(void);
@@ -48,23 +49,23 @@ class board
 
 	private:
 
-		vector<ImageDescriptor> & images;
-		vector<ImageDescriptor> & buttons;
+		vector<ImageDescriptor> images;
+		vector<ImageDescriptor> buttons;
 
-		int image_size_x; //tamaño de cada image
-		int image_size_y;
+		unsigned int image_size_x; //tamaño de cada image
+		unsigned int image_size_y;
 
-		int button_size_x; //tamaño de los botones
-		int button_size_y;
+		unsigned int button_size_x; //tamaño de los botones
+		unsigned int button_size_y;
 
-		int margin_x; //margenes
-		int margin_y;
+		unsigned int margin_x; //margenes
+		unsigned int margin_y;
 
-		int width; //dimensiones del damero
-		int height;
+		unsigned int width; //dimensiones del damero
+		unsigned int height;
 
-		int board_actual; // de cero a la cantidad de board -1
-		int board_cant; // cantidad de board
+		unsigned int board_actual; // de cero a la cantidad de board -1
+		unsigned int board_cant; // cantidad de board
 
 		void change_board(int button_pressed);
 };

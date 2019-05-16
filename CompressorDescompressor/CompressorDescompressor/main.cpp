@@ -7,8 +7,6 @@
 #include "SearchFile.h"
 #include "Supervisor.h"
 #include "Board.h"
-#include "Image.h"
-#include "Button.h"
 #include "lodepng.h"
 #include "Viewer.h"
 #include "Parser.h"
@@ -34,7 +32,7 @@ int main(int argc, char* argv[])
 			{
 				cout << "El path que ha pasado por parámetro es invalido, intente nuevamente" << endl;
 				cout << "Recuerde que primero debe pasar un path valido, donde haya imagenes" << TYPE_OF_DESCOMPRESS_FILE << endl;
-				cout << "Luego, seguido de un espacio debe pasar el threshold, que es un numero entre" << MIN_THRESHOLD << " y " << MAX_THRESHOLD << endl;
+				cout << "Luego, seguido de un espacio debe pasar el threshold, que es un numero entre" << MIN_THRESHOLD_PORC  << " y " << MAX_THRESHOLD_PORC << endl;
 
 			}
 			else if (((int)files_path.size()) == 0)
@@ -88,7 +86,7 @@ int main(int argc, char* argv[])
 								
 			}
 
-
+		
 
 			ImageDescriptor button_left(PATH_BUTTON_LEFT); //init de los botones
 			ImageDescriptor button_right(PATH_BUTTON_RIGHT);
@@ -96,7 +94,7 @@ int main(int argc, char* argv[])
 			buttons.push_back(button_left);
 			buttons.push_back(button_right);
 
-			board boar(WIDTH_DEFAULT, HEIGHT_DEFAULT, images, buttons);
+			board boar(WIDTH_DEFAULT, HEIGHT_DEFAULT, images);
 
 			if (boar.is_images_error())
 			{
@@ -120,11 +118,11 @@ int main(int argc, char* argv[])
 				all_ok = ERROR;
 			}
 
-			supervisor * superv = &supervisor(view, userData.threshold);
+			supervisor superv(view, userData.threshold);
 
-			while (!(superv->is_finish()))
+			while (!(superv.is_finish()))
 			{
-				superv->dispatcher(view, boar);
+				superv.dispatcher(view, boar);
 			}
 
 			images.erase(images.begin());

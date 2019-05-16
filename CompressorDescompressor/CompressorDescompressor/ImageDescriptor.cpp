@@ -1,7 +1,9 @@
 #include "ImageDescriptor.h"
 #include "Definitions.h"
 
-#define MAX_SIZE_FILENAME 21
+#define ASCII_BARRA_INV 92 // de '\'
+
+#define MAX_SIZE_FILENAME 50
 
 //listo
 ImageDescriptor::ImageDescriptor()
@@ -126,9 +128,9 @@ bool ImageDescriptor::get_error(void)
 //listo
 string ImageDescriptor::extract_name_file(const char * path)
 {
-	string aux = path;
-	string aux_reverse;
-	string name_file = ".-";
+	std::string aux = path;
+	std::string aux_reverse;
+	std::string name_file = ".-";
 
 
 	int j = 0;
