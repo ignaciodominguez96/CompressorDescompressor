@@ -1,21 +1,21 @@
 #include "Board.h"
 
-#define MARGEN_RATE 0.1
+
 
 
 //listo
-board::board(int width, int height, vector<image>& images, vector<button> & buttons) : images(images), buttons(buttons)
+board::board(int width, int height, vector<ImageDescriptor>& images, vector<ImageDescriptor> & buttons)
 {
 	this->width = width;
 	this->height = height;
 
-	this->margin_x = width * MARGEN_RATE;
-	this->margin_y = height * MARGEN_RATE;
+	this->margin_x = width * MARGIN_RATE;
+	this->margin_y = height * MARGIN_RATE;
 
 	this->images = images;
 
-	buttons[BUTTON_LEFT].set_pos(BUTTON_SIZE_X * MARGEN_RATE, this->height - BUTTON_SIZE_Y);
-	buttons[BUTTON_RIGHT].set_pos(this->height - (BUTTON_SIZE_X * 2) - ((BUTTON_SIZE_X * MARGEN_RATE) * 3), this->height - BUTTON_SIZE_Y - (BUTTON_SIZE_Y * MARGEN_RATE));
+	buttons[BUTTON_LEFT].set_pos(BUTTON_SIZE_X * MARGIN_RATE, this->height - BUTTON_SIZE_Y);
+	buttons[BUTTON_RIGHT].set_pos(this->height - (BUTTON_SIZE_X * 2) - ((BUTTON_SIZE_X * MARGIN_RATE) * 3), this->height - BUTTON_SIZE_Y - (BUTTON_SIZE_Y * MARGIN_RATE));
 
 	this->board_cant = (int)( (this->images).size() / MAX_IMAGES_IN_THE_BOARD);
 
@@ -27,7 +27,7 @@ board::board(int width, int height, vector<image>& images, vector<button> & butt
 	
 
 
-	this->board_actual =0;
+	this->board_actual = 0;
 }
 
 //listo
@@ -172,13 +172,13 @@ void board::set_button_size(int button_size_x, int button_size_y)
 }
 
 //listo
-vector <image> & board::get_images(void)
+vector <ImageDescriptor> & board::get_images(void)
 {
 	return (this->images);
 }
 
 //listo
-vector <button> & board::get_buttons(void)
+vector <ImageDescriptor> & board::get_buttons(void)
 {
 	return (this->buttons);
 }

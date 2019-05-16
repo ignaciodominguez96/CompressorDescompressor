@@ -20,7 +20,8 @@ class ImageDescriptor
 {
 public:
 	ImageDescriptor();
-	ImageDescriptor(const char * path_); 
+	ImageDescriptor(const char * path_image);
+	ImageDescriptor(const char * path_image, int no_image);
 	~ImageDescriptor();
 
 	bool is_select(void);

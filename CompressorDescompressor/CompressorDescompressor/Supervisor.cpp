@@ -138,7 +138,7 @@ void supervisor::dispatcher(viewer& viewer, board& board)
 				al_flip_display(); 
 
 
-				std::vector<image>& vector_images = board.get_images();
+				std::vector<ImageDescriptor>& vector_images = board.get_images();
 				
 				for (int i = 0; i < (vector_images).size(); i++)
 				{

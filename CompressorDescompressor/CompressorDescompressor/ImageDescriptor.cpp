@@ -1,5 +1,5 @@
 #include "ImageDescriptor.h"
-
+#include "Definitions.h"
 
 #define MAX_SIZE_FILENAME 21
 
@@ -14,7 +14,7 @@ ImageDescriptor::ImageDescriptor()
 }
 
 //listo
-ImageDescriptor::ImageDescriptor(const char * path_image)
+ImageDescriptor::ImageDescriptor(const char * path_image):path(path_image)
 {
 	this->file_name = extract_name_file(path_image);
 	this->error = false;
@@ -38,6 +38,15 @@ ImageDescriptor::ImageDescriptor(const char * path_image)
 		al_destroy_bitmap(aux_image);
 	}
 
+}
+
+ImageDescriptor::ImageDescriptor(const char * path_image, int no_image) : path(path_image)
+{
+	if (no_image == FLAG_NO_IMAGE_DESCOMPR)
+	{
+		this->file_name = extract_name_file(path_image);
+	}
+	
 }
 
 //listo

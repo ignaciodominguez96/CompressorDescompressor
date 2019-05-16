@@ -3,35 +3,57 @@
 #include <iostream>
 #include <sstream>
 
+//auxiliar functions
+int interpret_threshold(double threshold_cmd);
+double string_to_double(const char * num_string);
+
 using namespace std;
 
 bool parserCmd(int argc, char ** argv, userData_t & userData)
 {
 	bool can_parse = true;
 	
-	if (argc > 2)
+	if ((argc == CANT_ELEMENTS_PER_CMD) || (argc == CANT_ELEMENTS_PER_CMD -1)) //siempre el primer parametro es el modo (estrictamente)
 	{
-		userData.path = get_path_from_cmd(argc - 1, argv);		 //arg - 1 porque el último elemento del argv no pertenece al path (el último es el treshold)
-		
-		
-		double threshold_cmd = string_to_double(argv[argc - 1]); //ultimo parametro es el threshold
-		
-		
-		if ((threshold_cmd >= MIN_THRESHOLD) && (threshold_cmd <= MAX_THRESHOLD))
+		int mode = atoi(argv[POSITION_PARAMETER_MODE]);
+
+		if (mode == MODE_COMPRESSOR)
 		{
-			userData.threshold = interpret_threshold(threshold_cmd);
+			userData.mode = mode;
+
+			string path;
+			path = argv[POSITION_PARAMETER_PATH];
+			userData.path = path;
+
+			double threshold_cmd = string_to_double(argv[POSITION_PARAMETER_THRESHOLD]); //ultimo parametro es el threshold
+
+			if ((threshold_cmd >= MIN_THRESHOLD) && (threshold_cmd <= MAX_THRESHOLD))
+			{
+				userData.threshold = interpret_threshold(threshold_cmd);
+			}
+			else
+			{
+				cout << "Threshold (2do parametro) debe ser un numero entre " << MIN_THRESHOLD << " y " << MAX_THRESHOLD << endl;
+				can_parse = false;
+			}
+		}
+		else if (mode == MODE_DESCOMPRESSOR)
+		{
+			userData.mode = mode;
+
+			std::string path;
+			path = argv[POSITION_PARAMETER_PATH];
+			userData.path = path;
 		}
 		else
 		{
-			cout << "Threshold (2do parametro) debe ser un numero entre " << MIN_THRESHOLD << " y " << MAX_THRESHOLD << endl;
 			can_parse = false;
 		}
-
 
 	}
 	else
 	{
-		cout << "ERROR:  ingresar por linea de comando primero el path al directorio de imagenes a comprimir y luego un threshold entre 0 y 100" << endl;
+		cout << "ERROR:  ingreso lineas de comandos" << endl;
 		can_parse = false;
 	}
 
@@ -46,23 +68,6 @@ double string_to_double(const char * num_string)
 	num_dec = (double) stof(num_string_aux, nullptr);
 
 	return num_dec;
-}
-
-
-string get_path_from_cmd(int argc, char ** argv)
-{
-	string completePath;
-	if (argc > 0)
-	{
-		completePath = argv[1];
-	}
-	for (int i = 2; i < argc; i++)
-	{
-		completePath += ' ';
-		completePath += argv[i];
-	}
-
-	return completePath;
 }
 
 

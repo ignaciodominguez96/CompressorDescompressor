@@ -11,12 +11,6 @@
 enum types { RED = 0, GREEN, BLUE }; 
 
 
-typedef struct { //each cuadrant has it minimum and maximum for each color
-
-	
-} cuadrant;
-
-
 class cuadrant
 {
 	public:

@@ -5,8 +5,7 @@
 
 
 #include <vector>
-#include "Button.h"
-#include "Image.h"
+#include "ImageDescriptor.h"
 #include "Definitions.h"
 
 #define MAX_IMAGES_IN_THE_BOARD 9
@@ -20,7 +19,7 @@
 class board
 {
 	public:
-		board(int width, int height, vector<ImageDescriptor> & images, vector<ImageDescriptor> & buttons);
+		board(int width, int height, vector<ImageDescriptor>& images, vector<ImageDescriptor> & buttons);
 		~board();
 
 		void refresh(void);
@@ -33,8 +32,8 @@ class board
 		void set_image_size(int sizeX_, int sizeY_);
 		void set_button_size(int botonSizeX, int botonSizeY);
 
-		vector <image> & get_images(void);
-		vector <button> & get_buttons(void);
+		vector <ImageDescriptor> & get_images(void);
+		vector <ImageDescriptor> & get_buttons(void);
 
 		int get_size_x(void);
 		int get_size_y(void);

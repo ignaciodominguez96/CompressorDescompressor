@@ -15,98 +15,138 @@
 #include "Definitions.h"
 
 
+#define TIME_TO_SEE_MSSG_ERROR 5.0
+
 using namespace std;
 
 
 int main(int argc, char* argv[])
 {
-	vector <string> images_path;
+	vector <string> files_path;
 	userData_t userData;
+	int all_ok = OK;
 
-	if (!parserCmd(argc, argv, userData))
+	if (parserCmd(argc, argv, userData) == true)
 	{
-	}
+		if (userData.mode == MODE_COMPRESSOR)
+		{
+			if (search_files_with_extension(files_path, userData.path.c_str(), TYPE_OF_DESCOMPRESS_FILE) == false)
+			{
+				cout << "El path que ha pasado por parámetro es invalido, intente nuevamente" << endl;
+				cout << "Recuerde que primero debe pasar un path valido, donde haya imagenes" << TYPE_OF_DESCOMPRESS_FILE << endl;
+				cout << "Luego, seguido de un espacio debe pasar el threshold, que es un numero entre" << MIN_THRESHOLD << " y " << MAX_THRESHOLD << endl;
 
-	else if (!search_files_with_extension(images_path, userData.path.c_str(), TYPE_OF_DESCOMPRESS_FILE))
-	{
-		cout << "El path que ha pasado por parámetro es invalido, intente nuevamente" << endl;
-		cout << "Recuerde que primero debe pasar un path valido, donde haya imagenes" << TYPE_OF_DESCOMPRESS_FILE << endl;
-		cout << "Luego, seguido de un espacio debe pasar el threshold, que es un numero entre" << MIN_THRESHOLD << " y " << MAX_THRESHOLD << endl;
+			}
+			else if (((int)files_path.size()) == 0)
+			{
+				cout << "No existe ninguna imagen" << TYPE_OF_DESCOMPRESS_FILE << " en el directorio pasado por parametro" << endl;
+				cout << "asegurese que la carpeta tenga imagenes, o de estar pasando bien el path" << endl;
+				all_ok = ERROR;
+			}
+			
+		}
+		else if (userData.mode == MODE_DESCOMPRESSOR)
+		{
+			if (search_files_with_extension(files_path, userData.path.c_str(), TYPE_OF_COMPRESS_FILE) == false)
+			{
+				cout << "el path que ha pasado por parámetro es invalido, intente nuevamente" << endl;
+				cout << "recuerde debe pasar un path valido, donde haya archivos " << TYPE_OF_COMPRESS_FILE << endl;
+			}
+			else if (((int)files_path.size()) == 0)
+			{
+				cout << "No existe ningun archivo " << TYPE_OF_COMPRESS_FILE << " en el directorio pasado por parametro" << endl;
+				cout << "asegurese que la carpeta tenga archivos listos para descomprimir, o de estar pasando bien el path" << endl;
+				all_ok = ERROR;
+			}
+		}
+
 		
-		cout << userData.path.c_str() << endl;
-		
-		al_rest(5.0);
-	}
-	else if (((int)images_path.size()) == 0)
-	{
-		cout << "No existe ninguna imagen" << TYPE_OF_DESCOMPRESS_FILE << " en el directorio pasado por parametro" << endl;
-		cout << "asegurese que la carpeta tenga imagenes, o de estar pasando bien el path" << endl;
-		return ERROR;
-	}
-	else
-	{
 		if (!al_init())
 		{
 			cout << "Allegro Failed to initialize" << endl;
 		}
 		else
 		{
-			viewer * view = &viewer(MODE_COMPRESSOR);
+
+			viewer view(userData.mode);
 
 			vector<ImageDescriptor> images;
 			vector<ImageDescriptor> buttons;
 
-			for (int i = 0; i < ((int)images_path.size()); i++)
+			for (int i = 0; i < ((int)files_path.size()); i++)
 			{
-				ImageDescriptor image(images_path[i].c_str()); //init de todas las imagenes
-				images.push_back(image);
+				if (userData.mode == MODE_COMPRESSOR)
+				{
+					ImageDescriptor image(files_path[i].c_str()); //init de todas las imagenes
+					images.push_back(image);
+				}
+				else if (userData.mode == MODE_DESCOMPRESSOR)
+				{
+					ImageDescriptor image(files_path[i].c_str(), FLAG_NO_IMAGE_DESCOMPR); //init de imagenes descompress
+					images.push_back(image);
+				}
+								
 			}
 
-			
-			ImageDescriptor button_left("../EDA-TP8/botones/boton_left.png"); //init de los botones
-			ImageDescriptor button_right("../EDA-TP8/botones/boton_right.png");
-			
-			buttons.push_back(button_left); 
+
+
+			ImageDescriptor button_left(PATH_BUTTON_LEFT); //init de los botones
+			ImageDescriptor button_right(PATH_BUTTON_RIGHT);
+
+			buttons.push_back(button_left);
 			buttons.push_back(button_right);
 
-			board * boar = &board(WIDTH_DEFAULT, HEIGHT_DEFAULT, images, buttons);
-			
-			if (boar->is_images_error())
+			board boar(WIDTH_DEFAULT, HEIGHT_DEFAULT, images, buttons);
+
+			if (boar.is_images_error())
 			{
 				cout << "Image initialization Failed" << endl;
-				al_rest(1.0);
-				return ERROR;
+				all_ok = ERROR;
 			}
 
-			boar->set_image_size(IMAGE_SIZE_X, IMAGE_SIZE_Y); 
-														   
-			boar->refresh();
+			boar.set_image_size(IMAGE_SIZE_X, IMAGE_SIZE_Y);
 
-			view->update_display(*boar);
+			boar.refresh();
 
-			al_set_target_backbuffer(view->get_display());
+			view.update_display(boar);
+
+			al_set_target_backbuffer(view.get_display());
 
 			al_flip_display();
 
-			if (!(view->is_init))
+			if (!(view.is_init()))
 			{
-				cout << "Viewer Failed to initialize." << endl;
-				return -1;
+				cout << "Viewer Failed to initialize" << endl;
+				all_ok = ERROR;
 			}
-			
-			supervisor * superv = &supervisor(*view, userData.threshold);
-			
-			while (!(superv->is_finish))
+
+			supervisor * superv = &supervisor(view, userData.threshold);
+
+			while (!(superv->is_finish()))
 			{
-				superv->dispatcher(*view, *boar);
+				superv->dispatcher(view, boar);
 			}
 
 			images.erase(images.begin());
 			buttons.erase(buttons.begin());
 		}
+
 	}
 
-	return 0;
+	else
+	{
+		cout << "Error parseando";
+		all_ok = ERROR;
+		
+	}
+
+	if (all_ok == ERROR)
+	{
+		al_rest(TIME_TO_SEE_MSSG_ERROR);
+	}
+
+
+	return all_ok;
 }
 
 
