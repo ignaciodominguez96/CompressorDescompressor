@@ -16,7 +16,7 @@ ImageDescriptor::ImageDescriptor()
 }
 
 //listo
-ImageDescriptor::ImageDescriptor(const char * path_image):path(path_image)
+ImageDescriptor::ImageDescriptor(const char * path_image) :path(path_image)
 {
 	this->file_name = extract_name_file(path_image);
 	this->error = false;
@@ -126,16 +126,16 @@ bool ImageDescriptor::get_error(void)
 
 
 //listo
-string ImageDescriptor::extract_name_file(const char * path)
+string ImageDescriptor::extract_name_file(const char * image_path) 
 {
-	std::string aux = path;
-	std::string aux_reverse;
-	std::string name_file = ".-";
+	string aux (image_path);
+	string aux_reverse;
+	string name_file = ".-";
 
 
 	int j = 0;
 
-	for (int i = (int)aux.size(); (aux.back() != '/') && (j < MAX_SIZE_FILENAME) && (i > 0); i--, j++) //guardo el fileName en un string auxiliar, maximo filename es MAX_SIZE_FILENAME
+	for (int i = (int)aux.size(); (i > 0) && (aux.back() != '/') && (j < MAX_SIZE_FILENAME) ; i--, j++) //guardo el fileName en un string auxiliar, maximo filename es MAX_SIZE_FILENAME
 	{																				
 		aux_reverse.push_back(aux.back());
 		aux.pop_back();

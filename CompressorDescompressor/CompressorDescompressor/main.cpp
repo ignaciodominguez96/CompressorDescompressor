@@ -13,6 +13,10 @@
 #include "Definitions.h"
 
 
+#define OK		0
+#define ERROR  -1
+
+
 #define TIME_TO_SEE_MSSG_ERROR 5.0
 
 using namespace std;
@@ -94,7 +98,7 @@ int main(int argc, char* argv[])
 			buttons.push_back(button_left);
 			buttons.push_back(button_right);
 
-			board boar(WIDTH_DEFAULT, HEIGHT_DEFAULT, images);
+			board boar(WIDTH_DEFAULT, HEIGHT_DEFAULT, images, buttons);
 
 			if (boar.is_images_error())
 			{

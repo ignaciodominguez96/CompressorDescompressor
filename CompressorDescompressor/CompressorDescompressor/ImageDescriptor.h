@@ -14,6 +14,14 @@
 #define BUTTON_SIZE_Y 80
 #define SPACE 10
 
+
+#define UNIT 1
+#define MARGIN_RATE 0.1
+
+#define FLAG_NO_IMAGE_DESCOMPR 0
+
+
+
 using namespace std;
 
 class ImageDescriptor

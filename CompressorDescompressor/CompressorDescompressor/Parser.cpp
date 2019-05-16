@@ -5,6 +5,11 @@
 
 
 
+
+#define CANT_ELEMENTS_INPUT		3 //path + mode + threshold (optional)
+#define CANT_ELEMENTS_PER_CMD (CANT_ELEMENTS_INPUT + 1)
+
+
 //auxiliar functions
 int interpret_threshold(double threshold_cmd);
 double string_to_double(const char * num_string);

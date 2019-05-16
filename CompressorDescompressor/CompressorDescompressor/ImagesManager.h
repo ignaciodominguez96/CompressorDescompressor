@@ -10,6 +10,7 @@ void destroy_images(ALLEGRO_BITMAP ** images, unsigned int cant_images);
 
 ALLEGRO_BITMAP * resize_image(const char* path_image, int resize_x, int resize_y);
 
+ALLEGRO_BITMAP * resize_bitmap(ALLEGRO_BITMAP * bitmap, int resize_x, int resize_y);
 
 
 #endif // !IMAGE_MANAGER_H

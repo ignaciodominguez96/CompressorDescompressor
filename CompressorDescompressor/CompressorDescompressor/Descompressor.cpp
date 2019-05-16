@@ -2,39 +2,30 @@
 
 #define SIZE_STRING_DOT_COMPR 6
 
-#define FLAG_INDICATE_DIVISION 0
-#define CANT_CHILDRENS_PER_DIVISION 4
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <stdbool.h>
+#include "lodepng.h"
 
-#define ELEMENTS_IN_RGBA 4
+#define ERROR -1
+#define MIDDLE_X(x1,x2) (((x1)+(x2))/2)
+#define MIDDLE_Y(y1,y2) (((y1)+(y2))/2)
 
-#define TRUE 1
+#define LEFT_X(x1,x2)	((x1))
+#define RIGHT_X(x1,x2)	((x2))
 
-enum offset { RED_OFFSET = 0, GREEN_OFFSET, BLUE_OFFSET, ALPHA_OFFSET};
+#define TOP_Y(y1,y2)	((y1))
+#define BOTTOM_Y(y1,y2)	((y2))
 
-
-
-
-//auxiliar functions
-
-void draw_png(unsigned int width_, fsystem::ifstream& readFile, std::vector<unsigned int>& nVector, std::vector<unsigned char>& pngImage);
-
-void print_code_RGBA(std::vector<unsigned int>& vector, unsigned int size, std::vector<unsigned char>& image_png, unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha);
-
-void get_correlation(unsigned int& correlation_x, unsigned int& correlation_y, std::vector<unsigned int>& vector, unsigned int size);
-
-
-
-//
+bool decompress_recursion(unsigned char * image_arrey, unsigned int X1, unsigned int Y1, unsigned int X2, unsigned int Y2, FILE *image_file, uint32_t image_width, uint32_t image_height);
+void draw_pixels(unsigned char * image_arrey, unsigned int X1, unsigned int Y1, unsigned int X2, unsigned int Y2, uint32_t w_size, unsigned char red, unsigned char green, unsigned char blue);
+int f_size(FILE *source_file, void *dest, size_t num_bytes);
 
 
-
-bool descompress(const char * path_image)
+bool descompress(const char *path_image)
 {
-	bool can_descompress = false;
-
-	std::vector<unsigned int> vect;
-	std::vector<unsigned char> image_bmp;
-
+	
 	std::string image_filename(path_image);
 	image_filename.resize(image_filename.size() - SIZE_STRING_DOT_COMPR);
 	std::string extension = TYPE_OF_DESCOMPRESS_FILE;
@@ -43,155 +34,92 @@ bool descompress(const char * path_image)
 
 	fsystem::ifstream file_bmp(path_image, std::ios_base::in | std::ios_base::binary);
 
-	//extraigo los primeros 4 bytes de la imagen
-	unsigned int size;
-	unsigned char length[4];
 
-	for (int j = 0; j < 4; j++)			
-	{									
-		length[j] = file_bmp.get();
-	}
-	unsigned int * ptr = (unsigned int *)length;
+	unsigned char * image_array = NULL; //definimos el arreglo imagen en NULL
+	uint32_t width, height;
+	FILE *image_file;
 
-	size = *ptr;
-
-	image_bmp.resize((size_t)((size*size) * 4));
-
-	draw_png(size, file_bmp, vect, image_bmp);
-
-	unsigned int error = lodepng::encode(image_new_filename, image_bmp, size, size);
-
-	if (error == TRUE)
+	image_file = fopen(path_image, "rb+");
+	if (image_file == NULL)
 	{
-		std::cout << "DECODER LODE error " << error << ": " << lodepng_error_text(error) << std::endl;
-		can_descompress = false;
+		perror("ERROR");
+		return false; 
 	}
+	
+	if (f_size(image_file, &width, sizeof(uint32_t)) < sizeof(uint32_t))
+		return false; 
 
-	return can_descompress;
+	if (f_size(image_file, &height, sizeof(uint32_t)) < sizeof(uint32_t))
+		return false; 
+
+	
+	image_array = (unsigned char *) malloc(width*height * 4 * sizeof(unsigned char));
+
+	if (decompress_recursion(image_array, 0, 0, width, height, image_file, width, height))
+	{
+		
+		lodepng_encode32_file(image_new_filename.c_str(), image_array, width, height);
+		free(image_array); 
+		return true;
+	}
+	else
+		return false;
 }
 
 
-
-void draw_png(unsigned int size, fsystem::ifstream& file_bmp, std::vector<unsigned int>& vector, std::vector<unsigned char>& image_png)
+bool decompress_recursion(unsigned char * image_arrey, unsigned int X1, unsigned int Y1, unsigned int X2, unsigned int Y2, FILE *image_file, uint32_t image_width, uint32_t image_height)
 {
-	char actual_char = 0;
+	unsigned char character, red, green, blue;
+	bool ret = false;
 
-	char red;
-	char green;
-	char blue;
-
-	char alpha = (char) 255;
-
-	actual_char = file_bmp.get();
-
-
-	while (!file_bmp.eof()) // se dibuja hasta llegar al eof
+	
+	character = fgetc(image_file);
+	if (character == CHAR_INDICATE_OK_AVERAGE)
 	{
-		if ( (actual_char) == CHAR_INDICATE_DIVISION )
-		{
-			vector.push_back(FLAG_INDICATE_DIVISION); // image divide in  4 childrens
-		}
-
-
-
-		else if ( (actual_char) == CHAR_INDICATE_OK_AVERAGE) // image average
-		{
-			red		=	file_bmp.get();
-			green	=	file_bmp.get();
-			blue	=	file_bmp.get();
-
-
-			bool is_one_cuadrant = vector.size() != 0; //mientras no este en el cuadrante original(size = 0) caso especial donde solo hay un cuadrante,
-
-			if (is_one_cuadrant)
-			{
-				vector[ vector.size() - 1]++;	//incremento el contador de cuadrantes de el nivel donde que me encuentro
-											
-			}
-
-			print_code_RGBA(vector, size, image_png, red, green, blue, alpha); // dibujo
-			
-			
-			while ((is_one_cuadrant) && ((vector[ vector.size() - 1]  == CANT_CHILDRENS_PER_DIVISION)))	// si se dibujo los cuatro cuadrantes correspondientes a el cuadrado del nivel superior, borro la n
-			{																							// correspondiente a ese cuadrado y paso al siguiente cuadrante, haci hasta que no sea cuatro el nivel actual
-																					
-																					
-				vector.pop_back();	
-				
-				if (vector.size() != 0)
-				{
-					vector[vector.size() - 1 ]++;
-				}
-			}
-		}
-
-		actual_char = file_bmp.get();
+		red = fgetc(image_file); 
+		green = fgetc(image_file); 
+		blue = fgetc(image_file); 
+		draw_pixels(image_arrey, X1, Y1, X2, Y2, image_width, red, green, blue); 
+		
 	}
+	else if (character == CHAR_INDICATE_DIVISION)
+	{
+		if (decompress_recursion(image_arrey, LEFT_X(X1, X2), TOP_Y(Y1, Y2), MIDDLE_X(X1, X2), MIDDLE_Y(Y1, Y2), image_file, image_width, image_height) == false);
+		else if (decompress_recursion(image_arrey, MIDDLE_X(X1, X2), TOP_Y(Y1, Y2), RIGHT_X(X1, X2), MIDDLE_Y(Y1, Y2), image_file, image_width, image_height) == false);
+		else if (decompress_recursion(image_arrey, LEFT_X(X1, X2), MIDDLE_Y(Y1, Y2), MIDDLE_X(X1, X2), BOTTOM_Y(Y1, Y2), image_file, image_width, image_height) == false);
+		else if (decompress_recursion(image_arrey, MIDDLE_X(X1, X2), MIDDLE_Y(Y1, Y2), RIGHT_X(X1, X2), BOTTOM_Y(Y1, Y2), image_file, image_width, image_height) == false);
+		else ret = true;
+	}
+	ret = true;
+	return ret;
 }
 
-void print_code_RGBA(std::vector<unsigned int>& vector, unsigned int size, std::vector<unsigned char>& image_png, unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha)
+void draw_pixels(unsigned char * image_arrey, unsigned int X1, unsigned int Y1, unsigned int X2, unsigned int Y2, uint32_t w_size, unsigned char red, unsigned char green, unsigned char blue)
 {
-	unsigned int correlation_x;
-	unsigned int correlation_y;
-
-	unsigned int actual_size = (unsigned int) (size / pow(2, vector.size()));	// largo del cuadrado que voy a dibjar, calculado en base a el nivel en el que me encuentro
-																
-	get_correlation(correlation_x, correlation_y, vector, size); //busco el (0,0) relativo para ese cuadrante 
-
-	unsigned int  max_index_i;
-	unsigned int  max_index_j;
-
-
-	max_index_i = correlation_x + (actual_size) * ELEMENTS_IN_RGBA; // limites en x e y para dibujar el cuadrado
-	max_index_j = correlation_y + (actual_size);
-
-	for (unsigned int i = correlation_x; i < max_index_i; i += ELEMENTS_IN_RGBA) //for que me dibuja el cuadrado correspondiente y agrega el alpha arbitrario
-	{
-		for (unsigned int j = correlation_y; j < max_index_j; j++)
+	unsigned int  counter_row, counter_column;
+	for (counter_row = Y1; counter_row < Y2; counter_row++)
+		for (counter_column = X1; counter_column < X2; counter_column++)
 		{
-			image_png[i + j * (size * ELEMENTS_IN_RGBA) + RED_OFFSET   ] = red;
-			image_png[i + j * (size * ELEMENTS_IN_RGBA) + GREEN_OFFSET ] = green;
-			image_png[i + j * (size * ELEMENTS_IN_RGBA) + BLUE_OFFSET  ] = blue;
-			image_png[i + j * (size * ELEMENTS_IN_RGBA) + ALPHA_OFFSET ] = alpha;
+			image_arrey[((counter_column * 4) + (4 * w_size*counter_row)) + 0] = red; 
+			image_arrey[((counter_column * 4) + (4 * w_size*counter_row)) + 1] = green; 
+			image_arrey[((counter_column * 4) + (4 * w_size*counter_row)) + 2] = blue; 
+			image_arrey[((counter_column * 4) + (4 * w_size*counter_row)) + 3] = 0xff; 
 		}
-	}
 }
 
-void get_correlation(unsigned int& correlation_x, unsigned int& correlation_y, std::vector<unsigned int>& vector, unsigned int size)
+int f_size(FILE *source_file, void *dest, size_t num_bytes)
 {
-	correlation_x = 0;
-	correlation_y = 0;
+	int bytes_leidos;
+	unsigned int char_leido;
 
-	for (unsigned int actual_level = 1; actual_level <= vector.size(); actual_level++) // va sumando los corrimientos para cad anivel hasta llegar al actual
-	{
-		unsigned int cuadrant_id;
+	if (source_file == NULL || dest == NULL)
+		bytes_leidos = ERROR;
+	else
+		for (bytes_leidos = 0; bytes_leidos < num_bytes; bytes_leidos++)
+			if ((char_leido = fgetc(source_file)) == EOF)
+				break;
+			else
+				((char*)dest)[bytes_leidos] = char_leido;
 
-		if (vector.size() == actual_level)
-		{
-			cuadrant_id = vector[actual_level - 1]; // para el cuadrante actual, el valor en n sera igual al cuadrante que debo dibujar
-		}
-		else
-		{
-			cuadrant_id = vector[actual_level - 1] + 1;	// para los niveles mas altos, por la estructura del programa, el valor n  sera igual al cuadrante que debo dibujar menos uno
-		}	
-			
-
-
-				
-		switch (cuadrant_id) // corriminetos correspondientes a cada cuadrante
-		{
-			case ID_CUADRANT1:
-				break;
-			case ID_CUADRANT2:
-				correlation_x += (unsigned int) (size / pow(2, actual_level)) * ELEMENTS_IN_RGBA;
-				break;
-			case ID_CUADRANT3:
-				correlation_y += (unsigned int) (size / pow(2, actual_level));
-				break;
-			case ID_CUADRANT4:
-				correlation_x += (unsigned int) ((size / pow(2, actual_level)) * ELEMENTS_IN_RGBA);
-				correlation_y += (unsigned int) (size / pow(2, actual_level));
-				break;
-			}
-	}
+	return bytes_leidos;
 }

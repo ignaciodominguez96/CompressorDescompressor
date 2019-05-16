@@ -2,14 +2,6 @@
 
 
 
-#define BACKGROUND_PATH "background.png" //Imagen de fondo
-
-#define FONT_PATH "Font.ttf"
-#define FONT_COLOR "white"
-
-#define IMAGE_DESCOMPRESSOR_PATH "icon_compress.png"
-
-#define MARKER_WIDTH 10
 
 bool init_allegro(void);			//inicializa allegro --- listo
 		
@@ -114,7 +106,7 @@ unsigned int viewer::get_mode(void)
 //listo
 void viewer::print_message(const char * mesagge)
 {
-	al_draw_text(this->font, al_color_name(FONT_COLOR), this->width / 2.0, this->height - (IMAGE_SIZE_Y / 4.0), ALLEGRO_ALIGN_CENTER, mesagge);
+	al_draw_text(this->font, al_color_name(FONT_COLOR), this->width / 2.0, this->height - (IMAGE_SIZE_Y / 3.0), ALLEGRO_ALIGN_CENTER, mesagge);
 }
 
 
@@ -238,13 +230,18 @@ void viewer::print_board(board& board)
 
 		for (int i = first_button; (i < last_button) && (!button_touched); i++)
 		{
-			ImageDescriptor button = (board.get_buttons()[i]);
+
+
+			ImageDescriptor button = (board.get_buttons())[i];
 			
 			ALLEGRO_BITMAP * image_button = button.get_bitmap();
+
+			ALLEGRO_BITMAP * image_button_resize = resize_bitmap(image_button, BUTTON_SIZE_X, BUTTON_SIZE_Y);
+
 			int button_pos_x = button.get_pos_x();
 			int button_pos_y = button.get_pos_y();
 
-			al_draw_bitmap(image_button, button_pos_x, button_pos_y, 0);
+			al_draw_bitmap(image_button_resize, button_pos_x, button_pos_y, 0);
 		}
 	}
 

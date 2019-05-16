@@ -4,7 +4,7 @@
 
 
 //listo
-board::board(int width, int height, vector<ImageDescriptor> & images)
+board::board(int width, int height, vector<ImageDescriptor> & images, vector<ImageDescriptor> & buttons)
 {
 	this->width = width;
 	this->height = height;
@@ -14,11 +14,13 @@ board::board(int width, int height, vector<ImageDescriptor> & images)
 
 	this->images = images;
 	
-	this->buttons.resize((size_t)CANT_BUTTONS);
+	
 
-	(this->buttons[BUTTON_LEFT]).set_pos(BUTTON_SIZE_X * MARGIN_RATE, this->height - BUTTON_SIZE_Y);
-	(this->buttons[BUTTON_RIGHT]).set_pos(this->height - (BUTTON_SIZE_X * 2) - ((BUTTON_SIZE_X * MARGIN_RATE) * 3), this->height - BUTTON_SIZE_Y - (BUTTON_SIZE_Y * MARGIN_RATE));
+	(buttons[BUTTON_LEFT]).set_pos(BUTTON_SIZE_X * MARGIN_RATE, this->height - BUTTON_SIZE_Y);
+	(buttons[BUTTON_RIGHT]).set_pos(this->width - BUTTON_SIZE_X , this->height - BUTTON_SIZE_Y - (BUTTON_SIZE_Y * MARGIN_RATE));
 
+
+	this->buttons = buttons;
 
 	this->board_cant = (int)( (this->images).size() / MAX_IMAGES_IN_THE_BOARD);
 

@@ -20,7 +20,7 @@
 class board
 {
 	public:
-		board(int width, int height, vector<ImageDescriptor> & images);
+		board(int width, int height, vector<ImageDescriptor> & images, vector<ImageDescriptor> & buttons);
 		~board();
 
 		void refresh(void);
